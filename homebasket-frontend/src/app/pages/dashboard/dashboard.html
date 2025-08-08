@@ -1,1 +1,70 @@
-<p>dashboard works!</p>
+<div class="dashboard-container">
+  <!-- Top Bar -->
+  <header class="top-bar">
+    <div class="logo">🏠 <strong>HomeBasket</strong></div>
+    <div class="profile">
+      <div class="date-small">{{ currentDate | date:'fullDate' }} • {{ currentDate | date:'shortTime' }}</div>
+      <div class="profile-icon" title="Profile">👤</div>
+    </div>
+  </header>
+
+  <!-- Category Tabs -->
+  <nav class="category-tabs">
+    <button
+      *ngFor="let c of categoryList"
+      [class.active]="selectedCategory === c.key"
+      (click)="switchCategory(c.key)">
+      {{ c.label | titlecase }}
+    </button>
+  </nav>
+
+  <!-- Item Sections (visual columns like wireframe) -->
+  <section class="item-sections">
+    <div class="category-section" *ngFor="let c of categoryList">
+      <div class="category-header">{{ c.label }}</div>
+
+      <div *ngIf="categories[c.key].length > 0; else emptyTpl">
+        <div class="item" *ngFor="let item of categories[c.key]">
+          <div class="left">
+            <div class="item-name">{{ item.name }}</div>
+          </div>
+
+          <div class="right">
+            <div class="qty-controls">
+              <button class="inc-btn" (click)="incrementQty(item)">+</button>
+              <input
+                type="number"
+                [value]="item.qty"
+                (change)="editQty(item, $event)"
+                min="0"
+              />
+              <span class="unit">{{ item.unit || 'KG' }}</span>
+              <button class="remove-btn" (click)="removeItem(item)" title="Remove">✕</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <ng-template #emptyTpl>
+        <div class="no-items">No items</div>
+      </ng-template>
+    </div>
+  </section>
+
+  <!-- Add Bar (bottom centered) -->
+  <div class="add-bar">
+    <input type="text" placeholder="Item name..." [(ngModel)]="newItemName" />
+    <input type="number" min="0.1" step="0.1" [(ngModel)]="newItemQty" />
+    <select [(ngModel)]="newItemUnit">
+      <option>KG</option>
+      <option>Gram</option>
+      <option>Litre</option>
+      <option>Bottle</option>
+      <option>Unit</option>
+    </select>
+    <select [(ngModel)]="newItemCategory">
+      <option *ngFor="let c of categoryList" [value]="c.key">{{ c.label }}</option>
+    </select>
+    <button class="add-btn" (click)="addItem()">ADD</button>
+  </div>
+</div>
