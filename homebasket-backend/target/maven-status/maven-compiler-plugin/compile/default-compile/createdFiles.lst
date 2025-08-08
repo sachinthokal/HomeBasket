@@ -1,0 +1,4 @@
+com\homebasket\entity\Product.class
+com\homebasket\controller\ProductController.class
+com\homebasket\repository\ProductRepository.class
+com\homebasket\HomebasketApplication.class
