@@ -38,7 +38,7 @@
   padding:8px 12px; border-radius:6px; border:none; background:#e9eef5; cursor:pointer;
 }
 .category-tabs button.active {
-  background: var(--primary); color: #fff; box-shadow:0 3px 8px rgba(0,0,0,0.12);
+  background: var(--primary); color: blue; box-shadow:0 3px 8px rgba(0,0,0,0.12);
 }
 
 /* Sections layout */
@@ -99,7 +99,7 @@
   padding:8px; border-radius:6px; border:1px solid #d6dbe6; min-width:140px;
 }
 .add-btn {
-  background: var(--primary); color:white; border:none; padding:8px 14px; border-radius:8px; cursor:pointer;
+  background: rgb(13, 105, 0); color:black; border:none; padding:8px 14px; border-radius:8px; cursor:pointer;
 }
 
 /* responsive */

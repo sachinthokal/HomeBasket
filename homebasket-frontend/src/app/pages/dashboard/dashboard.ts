@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule, DatePipe, TitleCasePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
-type CategoryName = 'fruits' | 'dairy' | 'oils' | 'household';
+type CategoryName = 'groceries' | 'fruits' | 'dairy' | 'beverages' | 'household';
 
 interface Item {
   name: string;
@@ -23,28 +23,30 @@ export class DashboardComponent {
 
   // categories for tab header (key must match type CategoryName)
   categoryList: { key: CategoryName; label: string }[] = [
-    { key: 'fruits', label: 'Fruits & Vegetables 🍎' },
-    { key: 'dairy', label: 'Dairy & Eggs 🥚' },
-    { key: 'oils', label: 'Oils, Spices & Condiments 🌶️' },
-    { key: 'household', label: 'Household & Cleaning 🧹' },
+    { key: 'fruits', label: 'Fruits & Vegetables' },
+    { key: 'dairy', label: 'Dairy & Bakery' },
+    { key: 'beverages', label: 'Beverages' },
+     { key: 'groceries', label: 'Groceries' },
+    { key: 'household', label: 'Household & Cleaning' },
   ];
 
   // typed categories store
   categories: Record<CategoryName, Item[]> = {
-    fruits: [{ name: 'Apple', qty: 2, unit: 'KG' }],
-    dairy: [{ name: 'Milk', qty: 1, unit: 'Litre' }],
-    oils: [{ name: 'Olive Oil', qty: 1, unit: 'Bottle' }],
-    household: []
+    beverages: [],
+    fruits: [],
+    dairy: [],
+    groceries: [],
+    household: []   
   };
 
   // UI state
-  selectedCategory: CategoryName = 'fruits';
+  selectedCategory: CategoryName = 'groceries';
 
   // new item model
   newItemName = '';
   newItemQty = 1;
   newItemUnit = 'KG';
-  newItemCategory: CategoryName = 'fruits';
+  newItemCategory: CategoryName = 'groceries';
 
   constructor() {
     // update date/time every second

@@ -54,13 +54,16 @@
   <!-- Add Bar (bottom centered) -->
   <div class="add-bar">
     <input type="text" placeholder="Item name..." [(ngModel)]="newItemName" />
-    <input type="number" min="0.1" step="0.1" [(ngModel)]="newItemQty" />
+    <input type="number" min="1" step="1" [(ngModel)]="newItemQty" />
     <select [(ngModel)]="newItemUnit">
       <option>KG</option>
-      <option>Gram</option>
-      <option>Litre</option>
-      <option>Bottle</option>
-      <option>Unit</option>
+      <option>G</option>
+      <option>KG</option>
+      <option>ML</option>
+      <option>L</option>
+      <option>Dozen</option>
+      <option>Pack</option>
+      <option>Pcs</option>
     </select>
     <select [(ngModel)]="newItemCategory">
       <option *ngFor="let c of categoryList" [value]="c.key">{{ c.label }}</option>

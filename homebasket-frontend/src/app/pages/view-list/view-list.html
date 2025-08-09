@@ -1,1 +1,19 @@
-<p>view-list works!</p>
+<div class="dashboard-container">
+  <!-- Top Bar -->
+  <header class="top-bar">
+    <div class="logo">🏠 <strong>HomeBasket</strong></div>
+    <div class="profile">
+      <div class="date-small">{{ currentDate | date:'fullDate' }} • {{ currentDate | date:'shortTime' }}</div>
+      <div class="profile-icon" title="Profile">👤</div>
+    </div>
+  </header>
+<p *ngIf="message">{{ message }}</p>
+<h2>Product List</h2>
+<ul>
+  <li *ngFor="let product of products">
+    {{ product.name }} - ₹{{ product.price }}
+  </li>
+</ul>
+
+
+
