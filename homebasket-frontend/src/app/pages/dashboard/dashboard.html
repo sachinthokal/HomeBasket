@@ -1,73 +1,50 @@
-<div class="dashboard-container">
+<div class="dashboard">
   <!-- Top Bar -->
-  <header class="top-bar">
-    <div class="logo">🏠 <strong>HomeBasket</strong></div>
-    <div class="profile">
-      <div class="date-small">{{ currentDate | date:'fullDate' }} • {{ currentDate | date:'shortTime' }}</div>
-      <div class="profile-icon" title="Profile">👤</div>
+  <div class="top-bar">
+    <div class="logo">Logo</div>
+    <div class="Profile">
+      <span>{{ currentDateTime }}</span> &nbsp; | &nbsp; <b>Profile</b>
     </div>
-  </header>
-
-  <!-- Category Tabs -->
-  <nav class="category-tabs">
-    <button
-      *ngFor="let c of categoryList"
-      [class.active]="selectedCategory === c.key"
-      (click)="switchCategory(c.key)">
-      {{ c.label | titlecase }}
-    </button>
-  </nav>
-
-  <!-- Item Sections (visual columns like wireframe) -->
-  <section class="item-sections">
-    <div class="category-section" *ngFor="let c of categoryList">
-      <div class="category-header">{{ c.label }}</div>
-
-      <div *ngIf="categories[c.key].length > 0; else emptyTpl">
-        <div class="item" *ngFor="let item of categories[c.key]">
-          <div class="left">
-            <div class="item-name">{{ item.name }}</div>
-          </div>
-
-          <div class="right">
-            <div class="qty-controls">
-              <button class="inc-btn" (click)="incrementQty(item)">+</button>
-              <input
-                type="number"
-                [value]="item.qty"
-                (change)="editQty(item, $event)"
-                min="0"
-              />
-              <span class="unit">{{ item.unit || 'KG' }}</span>
-              <button class="remove-btn" (click)="removeItem(item)" title="Remove">✕</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <ng-template #emptyTpl>
-        <div class="no-items">No items</div>
-      </ng-template>
-    </div>
-  </section>
-
-  <!-- Add Bar (bottom centered) -->
-  <div class="add-bar">
-    <input type="text" placeholder="Item name..." [(ngModel)]="newItemName" />
-    <input type="number" min="1" step="1" [(ngModel)]="newItemQty" />
-    <select [(ngModel)]="newItemUnit">
-      <option>KG</option>
-      <option>G</option>
-      <option>KG</option>
-      <option>ML</option>
-      <option>L</option>
-      <option>Dozen</option>
-      <option>Pack</option>
-      <option>Pcs</option>
-    </select>
-    <select [(ngModel)]="newItemCategory">
-      <option *ngFor="let c of categoryList" [value]="c.key">{{ c.label }}</option>
-    </select>
-    <button class="add-btn" (click)="addItem()">ADD</button>
   </div>
+
+  <div class="form-container">
+    <input type="text" [(ngModel)]="item.name" placeholder="Item Name">
+    <input type="number" [(ngModel)]="item.qty" min="1" placeholder="Qty">
+
+    <select [(ngModel)]="item.unit">
+      <option value="KG">KG</option>
+      <option value="Ltr">Ltr</option>
+      <option value="Pcs">Pcs</option>
+    </select>
+
+    <select [(ngModel)]="item.category">
+      <option value="Fruits & Vegetables">Fruits & Vegetables</option>
+      <option value="Dairy & Eggs">Dairy & Eggs</option>
+      <option value="Oils, Spices & Condiments">Oils, Spices & Condiments</option>
+      <option value="Household & Cleaning">Household & Cleaning</option>
+    </select>
+
+    <button (click)="addItem()">ADD</button>
+  </div>
+
+  <table id="groceryTable">
+    <thead>
+      <tr>
+        <th>Grocery</th>
+        <th>Fruits & Vegetables</th>
+        <th>Dairy & Eggs</th>
+        <th>Oils, Spices & Condiments</th>
+        <th>Household & Cleaning</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let index of [].constructor()">
+        <td>{{ index + 1 }}</td>
+        <td>{{ itemsByCategory['Fruits & Vegetables'][index].name || '' }}</td>
+        <td>{{ itemsByCategory['Dairy & Eggs'][index].name || '' }}</td>
+        <td>{{ itemsByCategory['Oils, Spices & Condiments'][index].name || '' }}</td>
+        <td>{{ itemsByCategory['Household & Cleaning'][index].name || '' }}</td>
+      </tr>
+    </tbody>
+  </table>
 </div>

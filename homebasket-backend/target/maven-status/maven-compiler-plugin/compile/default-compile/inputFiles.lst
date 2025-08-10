@@ -1,4 +1,5 @@
-D:\DevOps\Projects\HomeBasket\homebasket-backend\src\main\java\com\homebasket\controller\ProductController.java
-D:\DevOps\Projects\HomeBasket\homebasket-backend\src\main\java\com\homebasket\entity\Product.java
+D:\DevOps\Projects\HomeBasket\homebasket-backend\src\main\java\com\homebasket\controller\ItemController.java
+D:\DevOps\Projects\HomeBasket\homebasket-backend\src\main\java\com\homebasket\service\ItemService.java
+D:\DevOps\Projects\HomeBasket\homebasket-backend\src\main\java\com\homebasket\Model\Item.java
 D:\DevOps\Projects\HomeBasket\homebasket-backend\src\main\java\com\homebasket\HomebasketApplication.java
-D:\DevOps\Projects\HomeBasket\homebasket-backend\src\main\java\com\homebasket\repository\ProductRepository.java
+D:\DevOps\Projects\HomeBasket\homebasket-backend\src\main\java\com\homebasket\repository\ItemRepository.java
