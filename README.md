@@ -6,19 +6,27 @@ HomeBasket application :
 - **Login / Register Page**
 - **Homepage**
 - **View List Page** (Markable shopping list)
-- **Dashboard** (Editable grocery categories)
+- **Dashboard**
 
 ## 🛠 Tech Stack
-- Angular 18+ (Standalone Components)
+- Angular 18+
 - TypeScript
 - HTML, CSS
+- Python
+- Django 
+- REST API's
 
 ---
 
-## 🚀 Project Setup
+## 🚀 Project HomeBasket
 
-### 1️⃣ Create Project
-
-```bash
+## Frontend - Angular
 
 ng serve
+
+
+## Backend Python-Django
+
+python manage.py runserver
+
+```bash

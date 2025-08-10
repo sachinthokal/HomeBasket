@@ -1,0 +1,66 @@
+<div class="dashboard">
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <div class="logo">Logo</div>
+    <div class="Profile">
+      <span>{{ currentDateTime }}</span> &nbsp; | &nbsp; <b>Profile</b>
+    </div>
+  </div>
+
+  <div class="form-container">
+    <input type="text" [(ngModel)]="item.name" placeholder="Item Name">
+    <input type="number" [(ngModel)]="item.qty" min="1" placeholder="Qty">
+
+    <select [(ngModel)]="item.unit">
+      <option value="KG">KG</option>
+      <option value="Gram">Gram</option>
+      <option value="Pcs">Pcs</option>
+      <option value="Pack">Pack</option>
+      <option value="Dozen">Dozen</option>
+      <option value="Ltr">Ltr</option>
+      <option value="ml">ml</option>
+    </select>
+
+    <select [(ngModel)]="item.category">
+      <option value="Grocery">Grocery</option>
+      <option value="Fruits & Vegetables">Fruits & Vegetables</option>
+      <option value="Dairy, Beverages & Bakery">Dairy, Beverages & Bakery</option>
+      <option value="Oils, Spices & Condiments">Oils, Spices & Condiments</option>
+      <option value="Household & Cleaning">Household & Cleaning</option>
+    </select>
+
+    <button (click)="addItem()">ADD</button>
+  </div>
+
+  <table id="groceryTable">
+    <thead>
+      <tr>
+        <th>No</th>
+        <th>Grocery</th>
+        <th>Fruits & Vegetables</th>
+        <th>Dairy, Beverages & Bakery</th>
+        <th>Oils, Spices & Condiments</th>
+        <th>Household & Cleaning</th>
+        
+      </tr>
+    </thead>
+    <tbody>
+      <!-- rows : किती rows हव्यात ते maxRows ने ठरवा -->
+      <tr *ngFor="let _ of [].constructor(maxRows); let i = index">
+        <td>{{ i + 1 }}</td>
+        <td *ngFor="let cat of categories">
+          {{ groupedItems[cat][i]?.name || '-' }} 
+          {{ groupedItems[cat][i]?.qty || '-' }} 
+          {{ groupedItems[cat][i]?.unit|| '' }}
+        </td>
+      </tr>
+
+      <!-- जर data नसेल तर No items found दाखवा -->
+      <tr *ngIf="maxRows === 0">
+        <td [attr.colspan]="categories.length + 1" style="text-align:center;">
+          No items found
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

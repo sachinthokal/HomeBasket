@@ -1,5 +1,0 @@
-com\homebasket\repository\ItemRepository.class
-com\homebasket\model\Item.class
-com\homebasket\controller\ItemController.class
-com\homebasket\HomebasketApplication.class
-com\homebasket\service\ItemService.class
