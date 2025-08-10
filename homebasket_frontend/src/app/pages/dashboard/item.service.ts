@@ -28,6 +28,7 @@ export class ItemService {
   }
 
   deleteItem(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/${id}`);
+    return this.http.delete<void>(`${this.baseUrl}${id}/`);
   }
+
 }

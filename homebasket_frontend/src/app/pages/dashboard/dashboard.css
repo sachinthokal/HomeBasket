@@ -22,6 +22,10 @@
   font-size: 18px;
 }
 
+.title{
+  color: red;
+}
+
 .Profile {
   color: white;
   text-align: right;

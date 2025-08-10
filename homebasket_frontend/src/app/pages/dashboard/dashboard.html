@@ -1,7 +1,7 @@
 <div class="dashboard">
   <!-- Top Bar -->
   <div class="top-bar">
-    <div class="logo">Logo</div>
+    <div class="logo">Home<span class="title">Basket</span></div>
     <div class="Profile">
       <span>{{ currentDateTime }}</span> &nbsp; | &nbsp; <b>Profile</b>
     </div>
@@ -52,6 +52,9 @@
           {{ groupedItems[cat][i]?.name || '-' }} 
           {{ groupedItems[cat][i]?.qty || '-' }} 
           {{ groupedItems[cat][i]?.unit|| '' }}
+        <button *ngIf="groupedItems[cat][i]?.id !== undefined" (click)="deleteByName(i+1)">
+  Delete
+</button>
         </td>
       </tr>
 

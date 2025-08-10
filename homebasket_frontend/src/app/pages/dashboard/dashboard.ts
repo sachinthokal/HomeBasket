@@ -22,7 +22,7 @@ export class Dashboard implements OnInit {
     category: '',
   };
 
-  categories = ['Grocery','Fruits & Vegetables', 'Dairy, Beverages & Bakery', 'Oils, Spices & Condiments', 'Household & Cleaning'];
+  categories = ['Grocery', 'Fruits & Vegetables', 'Dairy, Beverages & Bakery', 'Oils, Spices & Condiments', 'Household & Cleaning'];
   groupedItems: { [key: string]: Item[] } = {};
   maxRows: number = 0;
 
@@ -41,6 +41,20 @@ export class Dashboard implements OnInit {
     this.currentDateTime = now.toLocaleString();
   }
 
+  loadItems() {
+    this.itemService.getAllItems().subscribe(data => {
+      this.groupedItems = {};
+      this.maxRows = 0;
+
+      this.categories.forEach(category => {
+        this.groupedItems[category] = data.filter(item => item.category === category);
+        if (this.groupedItems[category].length > this.maxRows) {
+          this.maxRows = this.groupedItems[category].length;
+        }
+      });
+    });
+  }
+
   addItem() {
     this.itemService.addItem(this.item).subscribe({
       next: (response) => {
@@ -55,17 +69,17 @@ export class Dashboard implements OnInit {
 
   }
 
-  loadItems() {
-    this.itemService.getAllItems().subscribe(data => {
-      this.groupedItems = {};
-      this.maxRows = 0;
-
-      this.categories.forEach(category => {
-        this.groupedItems[category] = data.filter(item => item.category === category);
-        if (this.groupedItems[category].length > this.maxRows) {
-          this.maxRows = this.groupedItems[category].length;
-        }
-      });
+  deleteByName(id: number) {
+    console.log('Deleting item:', id);
+    this.itemService.deleteItem(id).subscribe({
+      next: () => {
+        alert(`Item "${id}" deleted successfully`);
+        this.loadItems();  // तुम्हाला जे data reload करायचंय ते method कॉल करा
+      },
+      error: (err) => {
+        console.error('Delete error:', err);
+        alert('Error deleting item');
+      }
     });
   }
 

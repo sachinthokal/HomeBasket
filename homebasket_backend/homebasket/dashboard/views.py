@@ -14,8 +14,7 @@ class ItemCreateAPIView(APIView):
             results = [dict(zip(columns, row)) for row in rows]
         return Response(results)
 
-    
-    
+
     def post(self, request):
         data = request.data
         name = data.get('name')
@@ -36,3 +35,16 @@ class ItemCreateAPIView(APIView):
                 return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         return Response({'message': 'Item inserted successfully'}, status=status.HTTP_201_CREATED)
+
+class ItemDeleteView(APIView):
+    def delete(self, request, pk, format=None):
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT * FROM groceryList WHERE id = %s", [pk])
+            row = cursor.fetchone()
+            if not row:
+                return Response({'error': 'Item not found'}, status=status.HTTP_404_NOT_FOUND)
+            try:
+                cursor.execute("DELETE FROM groceryList WHERE id = %s", [pk])
+            except Exception as e:
+                return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return Response({'message': 'Item deleted'}, status=status.HTTP_204_NO_CONTENT)
