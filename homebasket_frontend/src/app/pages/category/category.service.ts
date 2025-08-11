@@ -6,7 +6,7 @@ import { Item } from '../../model/item.model';
 @Injectable({
   providedIn: 'root'
 })
-export class ItemService {
+export class CategoryService {
   forEach(arg0: (item: any) => void) {
     throw new Error('Method not implemented.');
   }

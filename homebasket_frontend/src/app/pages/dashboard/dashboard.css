@@ -1,91 +1,160 @@
-/* ===== Layout ===== */
-.dashboard {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
+body {
+  margin: 0;
   font-family: Arial, sans-serif;
-  background-color: #f8f8f8;
+  background: #f5f6fa;
+  color: #333;
+  display: flex;
+  height: 100vh;
 }
 
-/* ===== Top Bar ===== */
-.top-bar {
+/* Sidebar */
+.sidebar {
+  width: 220px;
+  background: #2d3436;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  padding-top: 20px;
+}
+
+.sidebar h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.sidebar a {
+  color: #fff;
+  padding: 12px 20px;
+  text-decoration: none;
+  display: block;
+  transition: background 0.3s;
+}
+
+.sidebar a:hover {
+  background: #636e72;
+}
+
+/* Main Area */
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Top Bar */
+.topbar {
+  background: #fff;
+  padding: 10px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #222;
-  color: white;
-  padding: 10px 20px;
+  border-bottom: 1px solid #ddd;
 }
 
 .logo {
   font-weight: bold;
-  font-size: 18px;
+  font-size: 1.2rem;
 }
 
-.title{
-  color: red;
-}
-
-.Profile {
-  color: white;
-  text-align: right;
-}
-
-/* ===== Form Section ===== */
-.form-container {
+.profile {
   display: flex;
+  align-items: center;
   gap: 10px;
-  margin: 20px 0;
-  flex-wrap: wrap;
 }
 
-.form-container input[type="text"],
-.form-container input[type="number"],
-.form-container select {
-  padding: 6px;
-  font-size: 14px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+.date-text {
+  font-size: 0.9rem;
+  color: #555;
+  margin-right: 10px;
 }
 
-.form-container input[type="number"] {
-  width: 80px;
+/* Dashboard Content */
+.content {
+  padding: 20px;
 }
 
-.form-container input[type="text"] {
-  width: 150px;
+/* Cards */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 20px;
 }
 
-/* ===== Buttons ===== */
-.add-btn {
-  background: green;
-  color: white;
-  border: none;
-  cursor: pointer;
-  padding: 6px 12px;
-  border-radius: 4px;
-  font-size: 14px;
-}
-
-.add-btn:hover {
-  background: darkgreen;
-}
-
-/* ===== Table ===== */
-table {
-  width: 100%;
-  border-collapse: collapse;
-  background-color: white;
-  margin-top: 10px;
-}
-
-th,
-td {
-  border: 1px solid #000;
-  padding: 8px;
+.card {
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   text-align: center;
 }
 
-th {
-  background-color: #f4f4f4;
+.card h3 {
+  margin: 0;
+  font-size: 1.4rem;
+}
+
+.card p {
+  margin: 5px 0 0;
+  color: #555;
+}
+
+/* Chart Section */
+.chart {
+  background: #fff;
+  margin-top: 20px;
+  padding: 20px;
+  border-radius: 10px;
+  height: 300px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f8f9fa;
+}
+
+.input-container {
+  display: flex;
+  gap: 8px;
+  padding: 100px;
+  background: gainsboro;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  align-items: center;
+  max-width: auto;
+}
+
+.input-container input,
+.input-container select,
+.input-container button {
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-size: 14px;
+}
+
+.input-container input {
+  flex: 1;
+  outline: none;
+}
+
+.input-container select {
+  background-color: white;
+  color: black;
+  font-weight: bold;
+  cursor: pointer;
+  border: 1px solid black;
+}
+
+.btn-add {
+  background-color: #28a745;
+  color: white;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-add:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
 }

@@ -1,7 +1,8 @@
 export interface Item {
-  id?: number;      
+  id: number;     
   name: string;
   qty: number;
   unit: string;
-  category: string;     
+  category: string;
+  created_at?: string;   
 }

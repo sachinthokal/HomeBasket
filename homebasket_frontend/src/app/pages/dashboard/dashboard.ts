@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Item } from '../../model/item.model';
 import { ItemService } from './item.service';
@@ -7,80 +7,84 @@ import { ItemService } from './item.service';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './dashboard.html',
   styleUrls: ['./dashboard.css']
 })
 export class Dashboard implements OnInit {
+
+  categories = [
+    'Grocery',
+    'Fruits & Vegetables',
+    'Dairy, Beverages & Bakery',
+    'Oils, Spices & Condiments',
+    'Household & Cleaning'
+  ];
+
+  units = ['KG', 'Gram', 'Litre'];
+
+  itemForm!: FormGroup;
+
+  itemList: Item[] = [];
+
+  items: Item[] = [];
+
   currentDateTime: string = '';
 
-  item: Item = {
-    id: 0,
-    name: '',
-    qty: 0,
-    unit: '',
-    category: '',
-  };
+  constructor(private fb: FormBuilder, private itemService: ItemService) { }
 
-  categories = ['Grocery', 'Fruits & Vegetables', 'Dairy, Beverages & Bakery', 'Oils, Spices & Condiments', 'Household & Cleaning'];
-  groupedItems: { [key: string]: Item[] } = {};
-  maxRows: number = 0;
+  ngOnInit(): void {
 
+    this.itemForm = this.fb.group({
+      name: ['', Validators.required],
+      qty: [1, [Validators.required, Validators.min(1)]],
+      unit: ['KG', Validators.required],
+      category: ['', Validators.required]
 
+    });
+    this.onload();
 
-  constructor(private itemService: ItemService) { }
-
-  ngOnInit() {
     this.updateDateTime();
-    setInterval(() => this.updateDateTime(), 1000);
-    this.loadItems();
+    setInterval(() => {
+      this.updateDateTime();
+    }, 1000);
+
   }
 
   updateDateTime() {
-    const now = new Date();
-    this.currentDateTime = now.toLocaleString();
+    this.currentDateTime = new Date().toLocaleString('en-IN', {
+      weekday: 'short',
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit'
+    });
   }
 
-  loadItems() {
-    this.itemService.getAllItems().subscribe(data => {
-      this.groupedItems = {};
-      this.maxRows = 0;
-
-      this.categories.forEach(category => {
-        this.groupedItems[category] = data.filter(item => item.category === category);
-        if (this.groupedItems[category].length > this.maxRows) {
-          this.maxRows = this.groupedItems[category].length;
-        }
-      });
-    });
+  onload() {
+    this.itemService.getAllItems().subscribe(
+      (next) => { this.itemList = next; console.log("DB Loadded Successfully"); },
+      (err) => { console.log("DB Loadded Failed"); }
+    );
+    console.log('ngOnInit() - form build :', this.itemForm);
   }
 
   addItem() {
-    this.itemService.addItem(this.item).subscribe({
-      next: (response) => {
-        console.log('Item added', response);
-        this.item = { id: 0, name: '', qty: 1, unit: '', category: '' }; // reset form
-        this.loadItems();
-      },
-      error: (error) => {
-        console.error('Error adding item', error);
+    if (this.itemForm.valid) {
+      const newItem: Item = {
+        ...this.itemForm.value,
+        created_at: new Date().toISOString()
+      };
+      console.log('addItem() - Item Added:', newItem);
+      if (newItem.name) {
+        this.itemList.push(newItem);
+        this.itemForm.reset({ qty: 1, unit: 'KG' });
+        console.log('addItem() - Item Push in List:', this.itemList);
       }
-    });
 
-  }
-
-  deleteByName(id: number) {
-    console.log('Deleting item:', id);
-    this.itemService.deleteItem(id).subscribe({
-      next: () => {
-        alert(`Item "${id}" deleted successfully`);
-        this.loadItems();  // तुम्हाला जे data reload करायचंय ते method कॉल करा
-      },
-      error: (err) => {
-        console.error('Delete error:', err);
-        alert('Error deleting item');
-      }
-    });
+    }
   }
 
 }

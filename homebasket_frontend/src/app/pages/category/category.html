@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Category Grid</title>
+</head>
+<body>
+
+<div class="categories-container">
+  
+  <!-- Category 1 -->
+  <div class="category">
+    <div class="category-header">
+      Fruits & Vegetables 🍎
+    </div>
+    <div class="item-card">
+      <tr *ngFor="let item of itemList">
+          <td>{{ item.name }}</td>
+          <td>{{ item.unit }}</td>
+          <td>{{ item.qty }}</td>
+          <td>{{ item.category}}</td>
+          <td>
+            <button class="btn edit" (click)="onEdit(item)">Edit</button>
+            <button class="btn delete" (click)="deleteItemByIndex(item.id)">Delete</button>
+          </td>
+        </tr>
+    </div>
+  </div>
+
+  <!-- Category 2 -->
+  <div class="category">
+    <div class="category-header">
+      Dairy & Eggs 🥚
+    </div>
+  </div>
+
+  <!-- Category 3 -->
+  <div class="category">
+    <div class="category-header">
+      Oils, Spices & Condiments 🛢
+    </div>
+  </div>
+
+  <!-- Category 4 -->
+  <div class="category">
+    <div class="category-header">
+      Household & Cleaning 🧹
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>
