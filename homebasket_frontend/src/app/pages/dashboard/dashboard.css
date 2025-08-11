@@ -13,6 +13,19 @@
   transition: all 0.3s ease;
 }
 
+.active {
+  font-weight: bold;
+  position: relative;
+  background-color: #4caf50;
+  text-align: center;
+  border-radius: 5px;
+}
+.title{
+  text-align: center;
+  margin-bottom: 10px;
+  margin-top: -30px;
+}
+
 .sidebar a {
   display: block;
   color: white;
@@ -21,7 +34,7 @@
 }
 
 .sidebar a:hover {
-  background: #34495e;
+  background: #17152a;
   border-radius: 4px;
 }
 
@@ -34,6 +47,7 @@
     height: 100%;
     z-index: 10;
   }
+
   .sidebar.active {
     left: 0;
   }
@@ -54,7 +68,7 @@
   align-items: center;
   background: white;
   padding: 10px 20px;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
 }
 
 .menu-btn {
@@ -84,7 +98,7 @@
   padding: 15px;
   border-radius: 8px;
   text-align: center;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 /* Chart & Form */
@@ -120,10 +134,12 @@
 .btn-add:disabled {
   background-color: #aaa;
 }
-.date-text{
+
+.date-text {
   color: black;
   margin-right: 40px;
 }
-.profile{
+
+.profile {
   border: 2 px solid black;
 }
