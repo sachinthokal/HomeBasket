@@ -27,5 +27,8 @@ export class CategoryService {
     console.log('sent req to backend delete api')
     return this.http.delete(`${this.baseUrl}${id}/`)
   }
+  updateItem(item: Item) {
+    return this.http.put(`${this.baseUrl}${item.id}/`, item);
+  }
 
 }

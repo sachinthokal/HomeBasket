@@ -48,10 +48,10 @@ export class Category implements OnInit {
     this.sidebarOpen = !this.sidebarOpen;
   }
 
-  onEdit(items: Item) {
-    console.log('Edit clicked:', items);
-    console.log(this.items);
-  }
+  autoSave(item: Item) {
+  this.myService.updateItem(item).subscribe(next => { console.log('Auto saved successfully')});
+  console.log(item);
+}
 
   deleteItemByIndex(index: number) {
     console.log('Request from view to delete', index);
