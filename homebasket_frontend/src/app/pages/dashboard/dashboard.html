@@ -1,7 +1,10 @@
 <div class="container">
   <!-- Sidebar -->
   <div class="sidebar" [class.active]="sidebarOpen">
-    <div class="title"><h2><img width="64" height="64" src="https://img.icons8.com/nolan/64/shopping-1--v1.png" alt="shopping-1--v1"/>Home<span style="color: red;">Basket</span></h2> </div>
+    <div class="title">
+      <h2><img width="64" height="64" src="https://img.icons8.com/nolan/64/shopping-1--v1.png"
+          alt="shopping-1--v1" />Home<span style="color: red;">Basket</span></h2>
+    </div>
     <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
     <a routerLink="/category" routerLinkActive="active">Categories</a>
     <a routerLink="#" routerLinkActive="active">History</a>
@@ -50,6 +53,8 @@
         <form [formGroup]="itemForm" (ngSubmit)="addItem()">
           <div class="input-container">
             <input type="text" placeholder="Enter item name" formControlName="name" />
+
+            <input type="number" formControlName="qty" min="1" placeholder="Quantity" />
 
             <select formControlName="unit">
               <option *ngFor="let u of units" [value]="u">{{ u }}</option>
