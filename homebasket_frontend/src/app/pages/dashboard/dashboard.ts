@@ -18,11 +18,10 @@ export class Dashboard implements OnInit {
     'Grocery',
     'Fruits & Vegetables',
     'Dairy, Beverages & Bakery',
-    'Oils, Spices & Condiments',
     'Household & Cleaning'
   ];
 
-  units = ['KG', 'Gram', 'Litre'];
+  units = ['KG', 'Gram', 'Litre','Ml', 'Pieces', 'Packs','Dozens', 'Bottles', 'Cans'];
 
   itemForm!: FormGroup;
 
@@ -70,8 +69,7 @@ export class Dashboard implements OnInit {
 
   onload() {
     this.itemService.getAllItems().subscribe(
-      (next) => { this.itemList = next; console.log("DB Loadded Successfully"); },
-      (err) => { console.log("DB Loadded Failed"); }
+      (next) => { this.itemList = next; console.log("DB Loadded Successfully");}
     );
     console.log('ngOnInit() - form build :', this.itemForm);
   }
@@ -84,9 +82,12 @@ export class Dashboard implements OnInit {
       };
       console.log('addItem() - Item Added:', newItem);
       if (newItem.name) {
-        this.itemList.push(newItem);
+        this.itemList.push(newItem); 
+        this.itemService.addItem(newItem).subscribe((next) => { console.log("Data sent to the Backend API")});
         this.itemForm.reset({ qty: 1, unit: 'KG' });
         console.log('addItem() - Item Push in List:', this.itemList);
+        this.onload();
+        console.log('DB loadded');
       }
 
     }
