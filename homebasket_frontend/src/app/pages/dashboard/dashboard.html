@@ -1,18 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HomeBasket Dashboard</title>
-</head>
-
-<body>
+<div class="container">
   <!-- Sidebar -->
-  <div class="sidebar">
+  <div class="sidebar" [class.active]="sidebarOpen">
     <h2>🏠 HomeBasket</h2>
-    <a href="#">Dashboard</a>
-    <a href="/category">Categories</a>
+    <a routerLink="/dashboard">Dashboard</a>
+    <a routerLink="/category">Categories</a>
     <a href="#">History</a>
     <a href="#">Payments</a>
     <a href="#">Logout</a>
@@ -22,10 +13,11 @@
   <div class="main">
     <!-- Top Bar -->
     <div class="topbar">
+      <button class="menu-btn" (click)="toggleSidebar()">☰</button>
       <div class="logo">📊 Dashboard</div>
-      <div class="profile">
-        <span class="date-text">{{ currentDateTime }}</span>
-        <span>👤</span>
+      <div>
+        <span class="date-text">{{ currentDateTime | date:'dd/MM/yyyy hh:mm a'}}</span>
+        <span class="profile"> 👤</span>
       </div>
     </div>
 
@@ -55,39 +47,23 @@
       <div class="chart">
         <p>📈 Sales chart will go here...</p>
 
-        <div class="">
-          <form [formGroup]="itemForm" (ngSubmit)="addItem()">
-            <div class="input-container">
+        <form [formGroup]="itemForm" (ngSubmit)="addItem()">
+          <div class="input-container">
+            <input type="text" placeholder="Enter item name" formControlName="name" />
 
-              <input type="text" placeholder="Enter item name" formControlName="name">
+            <select formControlName="unit">
+              <option *ngFor="let u of units" [value]="u">{{ u }}</option>
+            </select>
 
-              <select formControlName="unit">
-                <option *ngFor="let u of units" [value]="u">{{ u }}</option>
-              </select>
+            <select formControlName="category">
+              <option value="">Select Category</option>
+              <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
+            </select>
 
-              <select formControlName="category">
-                <option value="">Select Category</option>
-                <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
-              </select>
-
-              <button type="submit" class="btn-add" [disabled]="itemForm.invalid">ADD</button>
-            </div>
-          </form>
-        </div>
-        <div>
-        </div>
+            <button type="submit" class="btn-add" [disabled]="itemForm.invalid">ADD</button>
+          </div>
+        </form>
       </div>
     </div>
   </div>
-  <script>
-    // Display current date and time
-    function updateDateTime() {
-      document.getElementById("currentDate").textContent =
-        new Date().toLocaleString();
-    }
-    setInterval(updateDateTime, 1000);
-    updateDateTime();
-  </script>
-</body>
-
-</html>
+</div>

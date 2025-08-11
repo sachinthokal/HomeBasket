@@ -31,6 +31,8 @@ export class Dashboard implements OnInit {
 
   currentDateTime: string = '';
 
+  sidebarOpen = false;
+    
   constructor(private fb: FormBuilder, private itemService: ItemService) { }
 
   ngOnInit(): void {
@@ -51,15 +53,17 @@ export class Dashboard implements OnInit {
 
   }
 
+   toggleSidebar() {
+      this.sidebarOpen = !this.sidebarOpen;
+    }
+
   updateDateTime() {
-    this.currentDateTime = new Date().toLocaleString('en-IN', {
-      weekday: 'short',
+    this.currentDateTime = new Date().toLocaleString('en-IN', {      
+      day: 'numeric',
       year: 'numeric',
       month: 'short',
-      day: 'numeric',
       hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit'
+      minute: '2-digit'
     });
   }
 

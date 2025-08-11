@@ -1,160 +1,129 @@
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #f5f6fa;
-  color: #333;
+/* Container Layout */
+.container {
   display: flex;
-  height: 100vh;
+  min-height: 100vh;
 }
 
 /* Sidebar */
 .sidebar {
-  width: 220px;
-  background: #2d3436;
-  color: #fff;
-  display: flex;
-  flex-direction: column;
-  padding-top: 20px;
-}
-
-.sidebar h2 {
-  text-align: center;
-  margin-bottom: 20px;
+  width: 180px;
+  background-color: #0c1824;
+  color: white;
+  padding: 20px;
+  transition: all 0.3s ease;
 }
 
 .sidebar a {
-  color: #fff;
-  padding: 12px 20px;
-  text-decoration: none;
   display: block;
-  transition: background 0.3s;
+  color: white;
+  padding: 10px 0;
+  text-decoration: none;
 }
 
 .sidebar a:hover {
-  background: #636e72;
+  background: #34495e;
+  border-radius: 4px;
+}
+
+/* Hide sidebar on small screens */
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    left: -220px;
+    top: 0;
+    height: 100%;
+    z-index: 10;
+  }
+  .sidebar.active {
+    left: 0;
+  }
 }
 
 /* Main Area */
 .main {
   flex: 1;
+  background: #f4f6f8;
   display: flex;
   flex-direction: column;
 }
 
 /* Top Bar */
 .topbar {
-  background: #fff;
-  padding: 10px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #ddd;
+  background: white;
+  padding: 10px 20px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
 }
 
-.logo {
-  font-weight: bold;
-  font-size: 1.2rem;
-}
-
-.profile {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.date-text {
-  font-size: 0.9rem;
-  color: #555;
-  margin-right: 10px;
-}
-
-/* Dashboard Content */
-.content {
-  padding: 20px;
-}
-
-/* Cards */
-.cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 20px;
-}
-
-.card {
-  background: #fff;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  text-align: center;
-}
-
-.card h3 {
-  margin: 0;
-  font-size: 1.4rem;
-}
-
-.card p {
-  margin: 5px 0 0;
-  color: #555;
-}
-
-/* Chart Section */
-.chart {
-  background: #fff;
-  margin-top: 20px;
-  padding: 20px;
-  border-radius: 10px;
-  height: 300px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-body {
-  font-family: Arial, sans-serif;
-  background-color: #f8f9fa;
-}
-
-.input-container {
-  display: flex;
-  gap: 8px;
-  padding: 100px;
-  background: gainsboro;
-  border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-  align-items: center;
-  max-width: auto;
-}
-
-.input-container input,
-.input-container select,
-.input-container button {
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  padding: 8px 10px;
-  font-size: 14px;
-}
-
-.input-container input {
-  flex: 1;
-  outline: none;
-}
-
-.input-container select {
-  background-color: white;
-  color: black;
-  font-weight: bold;
-  cursor: pointer;
-  border: 1px solid black;
-}
-
-.btn-add {
-  background-color: #28a745;
-  color: white;
-  font-weight: bold;
+.menu-btn {
+  display: none;
+  font-size: 20px;
+  background: none;
   border: none;
   cursor: pointer;
 }
 
+@media (max-width: 768px) {
+  .menu-btn {
+    display: block;
+  }
+}
+
+/* Cards Layout */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 15px;
+  margin: 20px;
+}
+
+.card {
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* Chart & Form */
+.chart {
+  background: white;
+  margin: 20px;
+  padding: 15px;
+  border-radius: 8px;
+}
+
+.input-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.input-container input,
+.input-container select {
+  padding: 8px;
+  flex: 1;
+  min-width: 120px;
+}
+
+.btn-add {
+  background-color: #27ae60;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
 .btn-add:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
+  background-color: #aaa;
+}
+.date-text{
+  color: black;
+  margin-right: 40px;
+}
+.profile{
+  border: 2 px solid black;
 }

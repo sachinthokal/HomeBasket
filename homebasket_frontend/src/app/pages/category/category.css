@@ -23,9 +23,8 @@ body {
   font-weight: bold;
   padding: 5px;
   border-bottom: 2px solid black;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  display:flex;
+  justify-content: space-around;
 }
 
 .item-card {
@@ -36,34 +35,39 @@ body {
   border-bottom: 1px solid #ddd;
 }
 
-.item-name {
-  width: 80px;
-  padding: 3px;
-}
-
-.item-qty {
-  width: 40px;
-  padding: 3px;
-  text-align: center;
-}
-
-.item-unit {
-  padding: 3px;
-}
-
-.item-actions {
+.item-row {
   display: flex;
-  flex-direction: column;
-  gap: 3px;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%; /* Full width */
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  box-sizing: border-box; /* Include padding in width */
 }
 
-.item-actions button {
-  background: #eee;
-  border: 1px solid #ccc;
-  padding: 2px 5px;
+.item-text {
+  flex: 1; /* Allow text to take space */
+}
+
+.item-buttons {
+  display: flex;
+  gap: 6px;
+}
+
+.btn {
+  padding: 4px 10px;
+  border: none;
+  border-radius: 4px;
   cursor: pointer;
+  font-size: 13px;
 }
 
-.item-actions button:hover {
-  background: #ddd;
+.edit {
+  background-color: #4caf50;
+  color: white;
+}
+
+.delete {
+  background-color: #f44336;
+  color: white;
 }
