@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Item } from '../../model/item.model';
-import { CategoryService } from './category.service';
+import { CategoryService } from '../../services/category.service';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-category',
