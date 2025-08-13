@@ -1,0 +1,25 @@
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: #0b0b16;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 16px;
+  z-index: 1000;
+  justify-content: flex-start;
+}
+
+
+.logo {
+  margin: 0;
+  font-size: 20px;
+}
+
+.spacer {
+  flex: 1;
+}

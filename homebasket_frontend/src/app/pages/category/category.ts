@@ -3,7 +3,7 @@ import { Item } from '../../model/item.model';
 import { CategoryService } from '../../services/category.service';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-category',
@@ -26,7 +26,7 @@ export class Category implements OnInit {
 
   units = ['KG', 'Gram', 'Litre', 'Ml', 'Pieces', 'Packs', 'Dozens', 'Bottles', 'Cans'];
 
-  constructor(private myService: CategoryService) { }
+  constructor(private myService: CategoryService, private router: Router) { }
 
 
   ngOnInit(): void {
@@ -56,6 +56,15 @@ export class Category implements OnInit {
   deleteItemByIndex(index: number) {
     console.log('Request from view to delete', index);
     this.myService.deleteItem(index).subscribe((next) => { this.onload(); console.log(index, ' - Sent to DB API') })
+  }
+
+  logout() {
+    console.log("Logout CLicked")
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('refresh_token');
+    localStorage.removeItem('user');
+    localStorage.removeItem('activeProfile');
+    this.router.navigate(['/login']);
   }
 
 }

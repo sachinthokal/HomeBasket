@@ -1,29 +1,5 @@
 <div class="container">
-  <!-- Sidebar -->
-  <div class="sidebar" [class.active]="sidebarOpen">
-    <div class="title">
-      <h2><img width="64" height="64" src="https://img.icons8.com/nolan/64/shopping-1--v1.png"
-          alt="shopping-1--v1" />Home<span style="color: red;">Basket</span></h2>
-    </div>
-    <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
-    <a routerLink="/category" routerLinkActive="active">Categories</a>
-    <a routerLink="#" routerLinkActive="active">History</a>
-    <a routerLink="#" routerLinkActive="active">Payments</a>
-    <a (click)="logout()" routerLinkActive="active">Logout</a>
-  </div>
-
-  <!-- Main Area -->
-  <div class="main">
-    <!-- Top Bar -->
-    <div class="topbar">
-      <button class="menu-btn" (click)="toggleSidebar()">☰</button>
-      <div class="logo">📊 Dashboard</div>
-      <div class="profile">
-        <span>{{activeProfile}}</span>
-      </div>
-    </div>
-
-    <!-- Content -->
+ <!-- Content -->
     <div class="content">
       <!-- Cards -->
       <div class="cards">
@@ -44,30 +20,27 @@
           <p>Revenue</p>
         </div>
       </div>
+  <!-- Chart Placeholder -->
+  <div class="chart">
+    <p>📈 Let's add your item here...</p>
 
-      <!-- Chart Placeholder -->
-      <div class="chart">
-        <p>📈 Let's add your item here...</p>
+    <form [formGroup]="itemForm" (ngSubmit)="addItem()">
+      <div class="input-container">
+        <input type="text" placeholder="Enter item name" formControlName="name" />
 
-        <form [formGroup]="itemForm" (ngSubmit)="addItem()">
-          <div class="input-container">
-            <input type="text" placeholder="Enter item name" formControlName="name" />
+        <input type="number" formControlName="qty" min="1" placeholder="Quantity" />
 
-            <input type="number" formControlName="qty" min="1" placeholder="Quantity" />
+        <select formControlName="unit">
+          <option *ngFor="let u of units" [value]="u">{{ u }}</option>
+        </select>
 
-            <select formControlName="unit">
-              <option *ngFor="let u of units" [value]="u">{{ u }}</option>
-            </select>
+        <select formControlName="category">
+          <option value="">Select Category</option>
+          <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
+        </select>
 
-            <select formControlName="category">
-              <option value="">Select Category</option>
-              <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
-            </select>
-
-            <button type="submit" class="btn-add" [disabled]="itemForm.invalid">ADD</button>
-          </div>
-        </form>
+        <button type="submit" class="btn-add" [disabled]="itemForm.invalid">ADD</button>
       </div>
-    </div>
+    </form>
   </div>
 </div>

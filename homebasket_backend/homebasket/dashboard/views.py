@@ -3,12 +3,15 @@ from rest_framework.response import Response # type: ignore
 from rest_framework import status # type: ignore
 from django.db import connection
 from .models import Item
+# from ..accounts import *
 
 class ItemCreateAPIView(APIView):
     
     def get(self, request):
+        user_id = request.user.id
+        print(user_id)
         with connection.cursor() as cursor:
-            cursor.execute("SELECT * FROM groceryList")
+            cursor.execute("SELECT * FROM groceryList WHERE user_id = %s",[user_id])
             rows = cursor.fetchall()
             columns = [col[0] for col in cursor.description]
             results = [dict(zip(columns, row)) for row in rows]
@@ -22,15 +25,18 @@ class ItemCreateAPIView(APIView):
         unit = data.get('unit')
         category = data.get('category')
 
+        # user_id from JWT authenticated user
+        user_id = request.user.id  
+
         if not name or qty is None or not category:
             return Response({'error': 'Missing required fields'}, status=status.HTTP_400_BAD_REQUEST)
 
         with connection.cursor() as cursor:
             try:
                 cursor.execute("""
-                    INSERT INTO groceryList (name, qty, unit, category)
-                    VALUES (%s, %s, %s, %s)
-                """, [name, qty, unit, category])
+                    INSERT INTO groceryList (name, qty, unit, category,user_id)
+                    VALUES (%s, %s, %s, %s, %s)
+                """, [name, qty, unit, category , user_id])
             except Exception as e:
                 return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 

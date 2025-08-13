@@ -32,8 +32,6 @@ export class Dashboard implements OnInit {
 
   currentDateTime: string = '';
 
-  sidebarOpen = false;
-  activeProfile = '';
 
   constructor(private fb: FormBuilder, private itemService: ItemService, private router: Router, private authService: AuthService) { }
 
@@ -55,10 +53,6 @@ export class Dashboard implements OnInit {
 
   }
 
-  toggleSidebar() {
-    this.sidebarOpen = !this.sidebarOpen;
-  }
-
   updateDateTime() {
     this.currentDateTime = new Date().toLocaleString('en-IN', {
       day: 'numeric',
@@ -74,15 +68,6 @@ export class Dashboard implements OnInit {
     this.itemService.getAllItems().subscribe(
       (next) => { this.itemList = next; console.log("DB Loadded Successfully"); }
     );
-    
-    this.authService.getProfile().subscribe((profile: any) => {
-      console.log(profile.first_name);
-      this.activeProfile = profile.first_name;
-    });
-
-
-
-
   }
 
   addItem() {
@@ -102,14 +87,6 @@ export class Dashboard implements OnInit {
       }
 
     }
-  }
-
-  logout() {
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('refresh_token');
-    localStorage.removeItem('user');
-    localStorage.removeItem('activeProfile');
-    this.router.navigate(['/login']);
   }
 
 }
