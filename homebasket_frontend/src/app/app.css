@@ -5,7 +5,6 @@
   right: 0;
   bottom: 0;
   left: 220px; /* match with sidebar width */
-  padding: 15px;
   background: #f5f5f5;
   transition: left 0.3s ease;
   overflow-y: auto;
