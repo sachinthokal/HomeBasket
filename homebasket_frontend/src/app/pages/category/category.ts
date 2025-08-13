@@ -18,6 +18,8 @@ export class Category implements OnInit {
   itemList: Item[] = [];
   items: Item[] = [];
 
+  isLoggedIn: boolean = true;
+
 
   Grocery: Item[] = [];
   Fruits_Vegetables: Item[] = [];

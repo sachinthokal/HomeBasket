@@ -31,11 +31,16 @@ export class Dashboard implements OnInit {
   items: Item[] = [];
 
   currentDateTime: string = '';
+  isLoggedIn: boolean = false;
 
 
   constructor(private fb: FormBuilder, private itemService: ItemService, private router: Router, private authService: AuthService) { }
 
   ngOnInit(): void {
+
+     this.authService.isLoggedIn$.subscribe(status => {
+      this.isLoggedIn = status;
+    });
 
     this.itemForm = this.fb.group({
       name: ['', Validators.required],
