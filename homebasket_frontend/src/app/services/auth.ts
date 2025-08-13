@@ -7,6 +7,9 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class AuthService {
+  saveAccessToken(access: any) {
+    throw new Error('Method not implemented.');
+  }
   private baseUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) { }
@@ -29,9 +32,13 @@ export class AuthService {
     return localStorage.getItem('access_token');
   }
 
-  getRefreshToken(): string | null {
-    return localStorage.getItem('refresh_token');
+  getRefreshToken(): Observable<any> {
+  const refresh = this.getRefreshToken();
+  if (!refresh) {
+    throw new Error('No refresh token found');
   }
+  return this.http.post(`${this.baseUrl}/token/refresh/`, { refresh });
+}
 
 
   logout() {
