@@ -3,12 +3,13 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { CommonModule } from '@angular/common';
 import { Item } from '../../model/item.model';
 import { ItemService } from '../../services/item.service';
-import { RouterModule } from '@angular/router';
+import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, RouterModule],
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './dashboard.html',
   styleUrls: ['./dashboard.css']
 })
@@ -21,7 +22,7 @@ export class Dashboard implements OnInit {
     'Household & Cleaning'
   ];
 
-  units = ['KG', 'Gram', 'Litre','Ml', 'Pieces', 'Packs','Dozens', 'Bottles', 'Cans'];
+  units = ['KG', 'Gram', 'Litre', 'Ml', 'Pieces', 'Packs', 'Dozens', 'Bottles', 'Cans'];
 
   itemForm!: FormGroup;
 
@@ -32,8 +33,9 @@ export class Dashboard implements OnInit {
   currentDateTime: string = '';
 
   sidebarOpen = false;
-    
-  constructor(private fb: FormBuilder, private itemService: ItemService) { }
+  activeProfile = '';
+
+  constructor(private fb: FormBuilder, private itemService: ItemService, private router: Router, private authService: AuthService) { }
 
   ngOnInit(): void {
 
@@ -53,25 +55,34 @@ export class Dashboard implements OnInit {
 
   }
 
-   toggleSidebar() {
-      this.sidebarOpen = !this.sidebarOpen;
-    }
+  toggleSidebar() {
+    this.sidebarOpen = !this.sidebarOpen;
+  }
 
   updateDateTime() {
-    this.currentDateTime = new Date().toLocaleString('en-IN', {      
+    this.currentDateTime = new Date().toLocaleString('en-IN', {
       day: 'numeric',
       year: 'numeric',
       month: 'short',
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
+      second: '2-digit'
     });
   }
 
   onload() {
     this.itemService.getAllItems().subscribe(
-      (next) => { this.itemList = next; console.log("DB Loadded Successfully");}
+      (next) => { this.itemList = next; console.log("DB Loadded Successfully"); }
     );
-    console.log('ngOnInit() - form build :', this.itemForm);
+    
+    this.authService.getProfile().subscribe((profile: any) => {
+      console.log(profile.first_name);
+      this.activeProfile = profile.first_name;
+    });
+
+
+
+
   }
 
   addItem() {
@@ -82,8 +93,8 @@ export class Dashboard implements OnInit {
       };
       console.log('addItem() - Item Added:', newItem);
       if (newItem.name) {
-        this.itemList.push(newItem); 
-        this.itemService.addItem(newItem).subscribe((next) => { console.log("Data sent to the Backend API")});
+        this.itemList.push(newItem);
+        this.itemService.addItem(newItem).subscribe((next) => { console.log("Data sent to the Backend API") });
         this.itemForm.reset({ qty: 1, unit: 'KG' });
         console.log('addItem() - Item Push in List:', this.itemList);
         this.onload();
@@ -91,6 +102,14 @@ export class Dashboard implements OnInit {
       }
 
     }
+  }
+
+  logout() {
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('refresh_token');
+    localStorage.removeItem('user');
+    localStorage.removeItem('activeProfile');
+    this.router.navigate(['/login']);
   }
 
 }

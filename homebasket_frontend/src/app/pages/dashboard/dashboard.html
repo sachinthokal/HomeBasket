@@ -9,7 +9,7 @@
     <a routerLink="/category" routerLinkActive="active">Categories</a>
     <a routerLink="#" routerLinkActive="active">History</a>
     <a routerLink="#" routerLinkActive="active">Payments</a>
-    <a routerLink="#" routerLinkActive="active">Logout</a>
+    <a (click)="logout()" routerLinkActive="active">Logout</a>
   </div>
 
   <!-- Main Area -->
@@ -18,9 +18,8 @@
     <div class="topbar">
       <button class="menu-btn" (click)="toggleSidebar()">☰</button>
       <div class="logo">📊 Dashboard</div>
-      <div>
-        <span class="date-text">{{ currentDateTime | date:'dd/MM/yyyy hh:mm a'}}</span>
-        <span class="profile"> 👤</span>
+      <div class="profile">
+        <span>{{activeProfile}}</span>
       </div>
     </div>
 

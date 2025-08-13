@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status, permissions
 from django.contrib.auth.models import User
 from .serializers import RegisterSerializer, UserSerializer
+from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 
 class RegisterAPIView(APIView):
@@ -38,7 +39,8 @@ class LoginAPIView(APIView):
         })
 
 class ProfileAPIView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuthenticated]  # Only logged-in users can access
+
     def get(self, request):
         serializer = UserSerializer(request.user)
         return Response(serializer.data)

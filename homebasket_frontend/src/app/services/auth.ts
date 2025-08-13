@@ -16,6 +16,7 @@ export class AuthService {
   }
 
   login(data: any): Observable<any> {
+    console.log(data)
     return this.http.post(`${this.baseUrl}/login/`, data);
   }
 
@@ -31,6 +32,7 @@ export class AuthService {
   getRefreshToken(): string | null {
     return localStorage.getItem('refresh_token');
   }
+
 
   logout() {
     localStorage.removeItem('access_token');

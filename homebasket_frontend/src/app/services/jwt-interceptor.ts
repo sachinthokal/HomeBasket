@@ -11,6 +11,7 @@ export class JwtInterceptorService implements HttpInterceptor {
 
   intercept(req: HttpRequest<any>, next: HttpHandler) {
     const token = this.auth.getAccessToken();
+
     if (token) {
       const cloned = req.clone({
         setHeaders: {
