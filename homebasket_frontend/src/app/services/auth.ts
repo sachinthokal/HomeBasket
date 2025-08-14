@@ -12,6 +12,8 @@ export class AuthService {
     throw new Error('Method not implemented.');
   }
   private baseUrl = environment.apiUrl;
+  private _isLoggedIn = new BehaviorSubject<boolean>(!!localStorage.getItem('access_token'));
+isLoggedIn$ = this._isLoggedIn.asObservable();
 
   constructor(private http: HttpClient, private router: Router) { }
 
@@ -20,7 +22,7 @@ export class AuthService {
   }
 
   login(data: any): Observable<any> {
-    console.log(data)
+     this._isLoggedIn.next(true);
     return this.http.post(`${this.baseUrl}/login/`, data);
   }
 
@@ -52,10 +54,8 @@ export class AuthService {
   logout() {
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
+    this._isLoggedIn.next(false);
   }
-
-  private loggedIn = new BehaviorSubject<boolean>(!!this.getAccessToken());
-  isLoggedIn$ = this.loggedIn.asObservable();
 
   getProfile() {
     return this.http.get(`${this.baseUrl}/profile/`);

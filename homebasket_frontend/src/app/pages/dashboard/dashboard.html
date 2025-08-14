@@ -1,28 +1,27 @@
-<div class="container" onload="isLoggedIn()">
- <!-- Content -->
-    <div class="content">
-      <!-- Cards -->
-      <div class="cards">
-        <div class="card">
-          <h3>120</h3>
-          <p>Total Orders</p>
-        </div>
-        <div class="card">
-          <h3>80</h3>
-          <p>Customers</p>
-        </div>
-        <div class="card">
-          <h3>15</h3>
-          <p>Categories</p>
-        </div>
-        <div class="card">
-          <h3>₹12,500</h3>
-          <p>Revenue</p>
-        </div>
-      </div>
-  <!-- Chart Placeholder -->
+<div class="container">
+  <!-- Dashboard Cards -->
+  <div class="cards">
+    <div class="card">
+      <h3>120</h3>
+      <p>Total Orders</p>
+    </div>
+    <div class="card">
+      <h3>80</h3>
+      <p>Customers</p>
+    </div>
+    <div class="card">
+      <h3>15</h3>
+      <p>Categories</p>
+    </div>
+    <div class="card">
+      <h3>₹12,500</h3>
+      <p>Revenue</p>
+    </div>
+  </div>
+
+  <!-- Add Item Section -->
   <div class="chart">
-    <p>📈 Let's add your item here...</p>
+    <p>📋 Let's add your item here...</p>
 
     <form [formGroup]="itemForm" (ngSubmit)="addItem()">
       <div class="input-container">

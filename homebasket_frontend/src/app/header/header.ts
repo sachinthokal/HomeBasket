@@ -1,8 +1,9 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component,  OnChanges,  OnInit} from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../services/auth';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
+import { AuthGuard } from '../guards/auth-guard';
 
 @Component({
   selector: 'app-header',
@@ -14,25 +15,24 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 export class Header implements OnInit {
   currentDateTime = '';
-   isLoggedIn: boolean = false;
- 
-  constructor(private router: Router, private authService: AuthService) { }
+  isLoggedIn = true;
+  timestamp = new Date();
+
+
+  constructor(private router: Router, private authService: AuthService, private authGuard: AuthGuard) { }
 
   activeProfile = '';
 
   ngOnInit(): void {
 
+   this.isLoggedIn = this.authGuard.canActivate();
+
     this.authService.getProfile().subscribe((profile: any) => {
       console.log(profile.first_name);
       this.activeProfile = profile.first_name;
-
-      this.authService.isLoggedIn$.subscribe(status => {
-      this.isLoggedIn = status;
+     
     });
 
-    });
-
-    
   }
 
   logout() {
@@ -42,6 +42,7 @@ export class Header implements OnInit {
     localStorage.removeItem('user');
     localStorage.removeItem('activeProfile');
     this.isLoggedIn = false;
+    this.activeProfile = ''
     this.authService.logout();
     this.router.navigate(['/login'], { replaceUrl: true });
   }

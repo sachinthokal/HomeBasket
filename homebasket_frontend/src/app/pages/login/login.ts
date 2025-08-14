@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth';
 import { FormsModule } from '@angular/forms';
@@ -10,15 +10,17 @@ import { CommonModule } from '@angular/common';
   templateUrl: './login.html',
   styleUrl: './login.css'
 })
-export class Login implements OnInit{
+export class Login implements OnInit {
+
+   @Output() loggedIn: EventEmitter<boolean> = new EventEmitter();
 
   user = { first_name: '', username: '', email: '', password: '' };
   credentials = { first_name: '', email: '', password: '' };
   error: string = '';
   isLoggedIn: boolean = false;
-  
+
   constructor(private auth: AuthService, private router: Router) { }
-  
+
   ngOnInit(): void {
   }
 
@@ -58,6 +60,8 @@ export class Login implements OnInit{
         this.auth.setTokens(res.access, res.refresh);
         // optional: store user in local storage
         localStorage.setItem('user', JSON.stringify(res.user));
+        this.auth.login(res.access); // token millya nantar call
+        this.isLoggedIn = true;
         this.router.navigate(['/dashboard']); // homepage or dashboard
       },
       error: err => {

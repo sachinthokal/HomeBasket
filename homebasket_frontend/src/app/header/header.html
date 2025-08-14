@@ -1,17 +1,28 @@
-<div class="navbar">
-  <div class="logo">
-    <img width="40" height="40" src="https://img.icons8.com/nolan/64/shopping-1--v1.png" alt="shopping" />
-    <h1>Home<span class="red">Basket</span></h1>
-  </div>
-  <div class="nav-links"  *ngIf="isLoggedIn">
-    <a routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Dashboard</a>
-    <a routerLink="/category" routerLinkActive="active">Categories</a>
-    <a routerLink="/history" routerLinkActive="active">History</a>
-    <a routerLink="/payments" routerLinkActive="active">Payments</a>
-    <!-- <a (click)="logout()">Logout</a> -->
-  </div>
-  <div class="profile">{{ activeProfile }}
-    &nbsp;  &nbsp;
-  <button  *ngIf="isLoggedIn" class="logout-btn" (click)="logout()">Logout</button>
+<div class="container-fluid">
+  <div class="navbar-row">
+
+    <!-- Logo + Title -->
+    <div class="logo">
+
+      <img src="https://img.icons8.com/nolan/64/shopping-1--v1.png" alt="shopping">
+      <a href="/dashboard">
+        <h1 class="h5 mb-0">Home<span class="text-danger">Basket</span></h1>
+      </a>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="nav">
+      <a routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Dashboard</a>
+      <a routerLink="/category" routerLinkActive="active">Categories</a>
+      <a routerLink="/history" routerLinkActive="active">History</a>
+      <a routerLink="/payments" routerLinkActive="active">Payments</a>
+    </nav>
+
+    <!-- Profile + Logout -->
+    <div class="profile-section">
+      <span>{{ activeProfile }}</span>
+      <button *ngIf="isLoggedIn" class="logout-btn btn-sm" (click)="logout()">Logout</button>
+    </div>
+
   </div>
 </div>

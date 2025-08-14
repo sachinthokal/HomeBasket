@@ -3,8 +3,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { CommonModule } from '@angular/common';
 import { Item } from '../../model/item.model';
 import { ItemService } from '../../services/item.service';
-import { Router, RouterModule } from '@angular/router';
-import { AuthService } from '../../services/auth';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -14,6 +13,7 @@ import { AuthService } from '../../services/auth';
   styleUrls: ['./dashboard.css']
 })
 export class Dashboard implements OnInit {
+
 
   categories = [
     'Grocery',
@@ -31,17 +31,17 @@ export class Dashboard implements OnInit {
   items: Item[] = [];
 
   currentDateTime: string = '';
-  isLoggedIn: boolean = false;
+  isLoggedIn:boolean = false;
 
-
-  constructor(private fb: FormBuilder, private itemService: ItemService, private router: Router, private authService: AuthService) { }
+  constructor(
+    private fb: FormBuilder,
+    private itemService: ItemService
+  ) { }
 
   ngOnInit(): void {
 
-     this.authService.isLoggedIn$.subscribe(status => {
-      this.isLoggedIn = status;
-    });
-
+    this.isLoggedIn = true;
+    
     this.itemForm = this.fb.group({
       name: ['', Validators.required],
       qty: [1, [Validators.required, Validators.min(1)]],
@@ -50,29 +50,15 @@ export class Dashboard implements OnInit {
 
     });
     this.onload();
-
-    this.updateDateTime();
-    setInterval(() => {
-      this.updateDateTime();
-    }, 1000);
-
   }
 
-  updateDateTime() {
-    this.currentDateTime = new Date().toLocaleString('en-IN', {
-      day: 'numeric',
-      year: 'numeric',
-      month: 'short',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit'
-    });
-  }
 
   onload() {
     this.itemService.getAllItems().subscribe(
       (next) => { this.itemList = next; console.log("DB Loadded Successfully"); }
     );
+
+
   }
 
   addItem() {
