@@ -12,15 +12,16 @@
     <!-- Navigation -->
     <nav class="nav">
       <a routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Dashboard</a>
-      <a routerLink="/category" routerLinkActive="active">Categories</a>
-      <a routerLink="/history" routerLinkActive="active">History</a>
-      <a routerLink="/payments" routerLinkActive="active">Payments</a>
+      <a routerLink="/category" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Categories</a>
+      <a routerLink="/history" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">History</a>
+      <a routerLink="/reports" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Reports</a>
     </nav>
 
     <!-- Profile + Logout -->
     <div class="profile-section">
       <!-- Small profile image -->
-      <img width="35" height="35" src="https://img.icons8.com/fluency/48/user-male-circle--v1.png" alt="user-male-circle--v1"/>
+      <img width="35" height="35" src="https://img.icons8.com/fluency/48/user-male-circle--v1.png"
+        alt="user-male-circle--v1" />
       <!-- Active user name -->
       <span class="profile">{{ username }}</span>
       <!-- Logout -->

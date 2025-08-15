@@ -8,4 +8,8 @@ import { Component } from '@angular/core';
 })
 export class NotFound {
 
+logout() {
+    localStorage.clear();
+    window.location.href = '/login';
+  }
 }

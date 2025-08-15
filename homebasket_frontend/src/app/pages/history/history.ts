@@ -1,22 +1,18 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Item } from '../../model/item.model';
 import { ItemService } from '../../services/item.service';
+import { CommonModule, DatePipe } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import * as bootstrap from 'bootstrap';
-import { AuthGuard } from '../../guards/auth-guard';
 
 @Component({
-  selector: 'app-dashboard',
-  standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, RouterModule],
-  templateUrl: './dashboard.html',
-  styleUrls: ['./dashboard.css']
+  selector: 'app-history',
+  imports: [DatePipe,ReactiveFormsModule, CommonModule, RouterModule],
+  templateUrl: './history.html',
+  styleUrl: './history.css'
 })
-export class Dashboard implements OnInit {
-  categories = ['Grocery', 'Fruits & Vegetables', 'Dairy, Beverages & Bakery', 'Household & Cleaning', 'Miscellaneous'];
-  units = ['KG', 'Gram', 'Litre', 'Ml', 'Qty', 'Pieces', 'Packs', 'Dozens', 'Bottles', 'Cans'];
+export class History implements OnInit {
+
   itemForm!: FormGroup;
   itemList: Item[] = [];
   isLoggedIn = false;
@@ -33,10 +29,10 @@ export class Dashboard implements OnInit {
       unit: ['KG', Validators.required],
       category: ['', Validators.required],
     });
-  }
 
-  
-  addItem() {
+    this.itemService.getAllItems().subscribe(items => this.itemList = items);
+
+    
     if (this.itemForm.valid) {
       // Current UTC timestamp
       const createdAtUTC = new Date().toISOString(); // UTC for backend
@@ -52,22 +48,8 @@ export class Dashboard implements OnInit {
         created_at: createdAtUTC, // send UTC to backend
         localTime: createdAtIST   // display IST locally
       };
-
-      this.itemService.addItem(newItem).subscribe({
-        next: (savedItem) => {
-          this.itemList.push(savedItem || newItem);
-          this.itemForm.reset({ qty: 1, unit: 'KG' });
-
-          // Show Toast
-          const toastEl = document.getElementById('successToast');
-          if (toastEl) {
-            const toast = new bootstrap.Toast(toastEl);
-            toast.show();
-          }
-        },
-        error: (err) => console.error("Error saving item:", err)
-      });
     }
-  }
 
+  
+  }
 }

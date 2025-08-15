@@ -3,15 +3,13 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { environment } from '../../environments/environment';
-import { Profile } from '../model/profile.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  private baseUrl = environment.apiUrl;
+  private baseUrl = 'http://127.0.0.1:8000/api/auth';
   private currentUserSubject = new BehaviorSubject<string | null>(null);
   currentUser$ = this.currentUserSubject.asObservable();
 
@@ -36,12 +34,16 @@ export class AuthService {
     return this.http.post<any>(`${this.baseUrl}/login/`, { username, password })
       .pipe(
         tap(res => {
+          // Store JWT tokens
           localStorage.setItem('access_token', res.access);
           localStorage.setItem('refresh_token', res.refresh);
-          this.fetchUsername(); // update header after login
+
+          // Optional: decode token to get username, or call backend
+          this.fetchUsername(); // Update header/UI after login
         })
       );
   }
+
 
   logout(): void {
     const refresh = localStorage.getItem('refresh_token');

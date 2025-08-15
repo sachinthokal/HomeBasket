@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     #'rest_framework_simplejwt.token_blacklist',
     'dashboard',
     'accounts',
+    'shopping',
 ]
 
 MIDDLEWARE = [
@@ -55,7 +56,20 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:4200",  # Angular frontend
+]
+
+CORS_ALLOW_CREDENTIALS = True  # important for withCredentials
+
+CORS_ALLOW_METHODS = [
+    'GET',
+    'POST',
+    'PUT',
+    'PATCH',
+    'DELETE',
+    'OPTIONS'
+]
 
 ROOT_URLCONF = 'homebasket.urls'
 

@@ -1,9 +1,10 @@
 import { Component, OnChanges, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
-import { AuthService } from '../services/auth';
+import { AuthService } from '../services/auth.Service';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AuthGuard } from '../guards/auth-guard';
+import { HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'app-header',
@@ -28,6 +29,15 @@ export class Header implements OnInit {
     }
 
   }
+
+  private getHeaders(): HttpHeaders {
+    const token = localStorage.getItem('access_token');
+    return new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`  // JWT token included
+    });
+  }
+
 
 
   logout() {
