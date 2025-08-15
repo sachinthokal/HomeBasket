@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { jwtDecode } from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root'
@@ -44,17 +45,35 @@ export class AuthService {
       );
   }
 
+logout(): void {
+  const access = localStorage.getItem('access_token');
+  const refresh = localStorage.getItem('refresh_token');
 
-  logout(): void {
-    const refresh = localStorage.getItem('refresh_token');
-    if (refresh) {
-      this.http.post(`${this.baseUrl}/logout/`, { refresh }).subscribe();
+  if (access) {
+    try {
+      const decoded: any = jwtDecode(access);
+      const now = Date.now() / 1000;
+
+      if (decoded.exp && decoded.exp < now) {
+        console.warn('Access token expired. Logging out...');
+      }
+    } catch (err) {
+      console.error('Invalid token format', err);
     }
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('refresh_token');
-    this.currentUserSubject.next(null);
-    this.router.navigate(['/login']);
   }
+
+  if (refresh) {
+    this.http.post(`${this.baseUrl}/logout/`, { refresh }).subscribe({
+      error: (err) => console.error('Logout API error:', err)
+    });
+  }
+
+  localStorage.removeItem('access_token');
+  localStorage.removeItem('refresh_token');
+  this.currentUserSubject.next(null);
+  this.router.navigate(['/login']);
+}
+
 
   getAccessToken(): string | null {
     return localStorage.getItem('access_token');
