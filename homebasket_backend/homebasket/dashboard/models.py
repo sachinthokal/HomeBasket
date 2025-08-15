@@ -13,6 +13,7 @@ class Item(models.Model):
     qty = models.PositiveIntegerField(default=1)
     unit = models.CharField(max_length=50, blank=True)  # e.g., kg, pcs
     category = models.CharField(max_length=50, choices=CATEGORY_CHOICES)
+    created_at = models.DateTimeField(auto_now_add=True)  # <-- Add this line
 
     def __str__(self):
         return f"{self.name} ({self.qty} {self.unit}) - {self.category}"

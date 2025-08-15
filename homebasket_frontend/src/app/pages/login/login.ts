@@ -1,73 +1,87 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { Router } from '@angular/router';
-import { AuthService } from '../../services/auth';
-import { FormsModule } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { AuthService } from '../../services/auth';
+import Swal from 'sweetalert2';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, ReactiveFormsModule,],
   templateUrl: './login.html',
   styleUrl: './login.css'
 })
 export class Login implements OnInit {
 
-   @Output() loggedIn: EventEmitter<boolean> = new EventEmitter();
 
-  user = { first_name: '', username: '', email: '', password: '' };
-  credentials = { first_name: '', email: '', password: '' };
-  error: string = '';
-  isLoggedIn: boolean = false;
+  signupForm!: FormGroup;
+  loginForm!: FormGroup;
+  serverErrors: any = {};
+  activeProfile: any;
 
-  constructor(private auth: AuthService, private router: Router) { }
+  constructor(private fb: FormBuilder, private auth: AuthService, private router: Router) { }
 
   ngOnInit(): void {
+    this.signupForm = this.fb.group({
+      first_name: ['', [Validators.required, Validators.minLength(3)]],
+      username: ['', [Validators.required, Validators.minLength(3)]],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required,]]
+    });
+
+    this.loginForm = this.fb.group({
+      username: ['', [Validators.required]],
+      password: ['', [Validators.required]]
+    });
+
+    // login.component.ts ngOnInit
+    if (this.auth.getAccessToken()) {
+      this.router.navigate(['/dashboard'], { replaceUrl: true });
+    }
   }
 
   onSignup() {
-    this.error = '';
-    // console.log(this.user)
-    this.auth.register(this.user).subscribe({
-      next: (res: any) => {
-        alert(res.message || 'Registered successfully');
-        this.user = { first_name: '', username: '', email: '', password: '' }
-        this.router.navigate(['/login']);
-      },
-      error: err => {
-        // show first error message
-        if (err.error) {
-          if (err.error.email) this.error = err.error.email[0];
-          else if (err.error.username) this.error = err.error.username[0];
-          else if (err.error.password) this.error = "Password : " + err.error.password[0];
-          else this.error = typeof err.error === 'string' ? err.error : 'Something went wrong';
-        } else {
-          this.error = 'Server error';
+    if (this.signupForm.valid) {
+      console.log('Signup Data:', this.signupForm.value);
+      // API call for signup
+      this.activeProfile = this.signupForm.value;
+      this.auth.register(this.signupForm.value).subscribe({
+        next: (res) => {
+          console.log('Signup Success:', res);
+          Swal.fire('Success', 'User registered successfully', 'success');
+        },
+        error: (err) => {
+          console.log('Signup Error:', err);
+          Swal.fire('Error', 'Registration failed', 'error');
+          this.serverErrors = err.error;
         }
-      }
-    });
-  }
-  onLoginload() {
-    this.error = '';
-    // console.log("Click Login")
+      });
+
+    }
   }
 
-  onSignin() {
-    this.error = '';
-    // console.log("Signin CLicked")
-    this.auth.login(this.credentials).subscribe({
-      next: (res: any) => {
-        // store tokens
-        this.auth.setTokens(res.access, res.refresh);
-        // optional: store user in local storage
-        localStorage.setItem('user', JSON.stringify(res.user));
-        this.auth.login(res.access); // token millya nantar call
-        this.isLoggedIn = true;
-        this.router.navigate(['/dashboard']); // homepage or dashboard
-      },
-      error: err => {
-        this.error = err?.error?.error || 'Invalid credentials';
-      }
-    });
+  onLogin() {
+    if (this.loginForm.valid) {
+      console.log('Login User:', this.loginForm.value.username);
+      // API call for login
+      this.auth.login(this.loginForm.value.username, this.loginForm.value.password)
+        .subscribe({
+          next: (res: any) => {
+
+            //console.log('Login Success:', res);
+            Swal.fire('Success', 'Login successful!', 'success');
+            this.router.navigate(['/dashboard'], { replaceUrl: true });
+          },
+          error: (err: any) => {
+            console.error('Login Error:', err);
+            let message = 'Login failed. Please check credentials.';
+            if (err.error && err.error.detail) {
+              message = err.error.detail; // DRF error message
+            }
+            Swal.fire('Error', message, 'error');
+          }
+        });
+    }
   }
 
 } 

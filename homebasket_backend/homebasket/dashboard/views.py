@@ -1,22 +1,30 @@
-from rest_framework.views import APIView # type: ignore
-from rest_framework.response import Response # type: ignore
-from rest_framework import status # type: ignore
+from rest_framework.views import APIView  # type: ignore
+from rest_framework.response import Response  # type: ignore
+from rest_framework import status  # type: ignore
 from django.db import connection
+from datetime import datetime
+from accounts import models
 from .models import Item
-# from ..accounts import *
+
 
 class ItemCreateAPIView(APIView):
-    
+
     def get(self, request):
         user_id = request.user.id
-        print(user_id)
         with connection.cursor() as cursor:
-            cursor.execute("SELECT * FROM groceryList WHERE user_id = %s",[user_id])
+            cursor.execute("SELECT * FROM groceryList WHERE user_id = %s", [user_id])
             rows = cursor.fetchall()
             columns = [col[0] for col in cursor.description]
-            results = [dict(zip(columns, row)) for row in rows]
-        return Response(results)
 
+            # convert created_at to ISO string
+            results = []
+            for row in rows:
+                row_dict = dict(zip(columns, row))
+                if 'created_at' in row_dict and row_dict['created_at']:
+                    row_dict['created_at'] = row_dict['created_at'].isoformat()
+                results.append(row_dict)
+
+        return Response(results)
 
     def post(self, request):
         data = request.data
@@ -24,6 +32,9 @@ class ItemCreateAPIView(APIView):
         qty = data.get('qty')
         unit = data.get('unit')
         category = data.get('category')
+
+        # auto-generate created_at
+        created_at = datetime.now()  
 
         # user_id from JWT authenticated user
         user_id = request.user.id  
@@ -34,13 +45,14 @@ class ItemCreateAPIView(APIView):
         with connection.cursor() as cursor:
             try:
                 cursor.execute("""
-                    INSERT INTO groceryList (name, qty, unit, category,user_id)
-                    VALUES (%s, %s, %s, %s, %s)
-                """, [name, qty, unit, category , user_id])
+                    INSERT INTO groceryList (name, qty, unit, category, user_id, created_at)
+                    VALUES (%s, %s, %s, %s, %s, %s)
+                """, [name, qty, unit, category, user_id, created_at])
             except Exception as e:
                 return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         return Response({'message': 'Item inserted successfully'}, status=status.HTTP_201_CREATED)
+
 
 class ItemDeleteView(APIView):
     def delete(self, request, pk, format=None):

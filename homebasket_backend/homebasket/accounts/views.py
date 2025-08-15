@@ -1,46 +1,70 @@
+# views.py
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status, permissions
-from django.contrib.auth.models import User
-from .serializers import RegisterSerializer, UserSerializer
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework_simplejwt.tokens import RefreshToken
+from django.contrib.auth.models import User
+from rest_framework import status
+from rest_framework_simplejwt.views import TokenObtainPairView
 
-class RegisterAPIView(APIView):
-    permission_classes = [permissions.AllowAny]
+# ---------------------------
+# User Registration (optional)
+# ---------------------------
+class RegisterView(APIView):
+    permission_classes = (AllowAny,)
+
     def post(self, request):
-        serializer = RegisterSerializer(data=request.data)
-        if serializer.is_valid():
-            user = serializer.save()
-            return Response({'message': 'User registered successfully'}, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        data = request.data
+        username = data.get("username")
+        password = data.get("password")
+        email = data.get("email", "")
+        first_name = data.get("firstname", "")
+        last_name = data.get("last_name", "")
 
-class LoginAPIView(APIView):
-    permission_classes = [permissions.AllowAny]
+        if User.objects.filter(username=username).exists():
+            return Response({"error": "Username already exists"}, status=status.HTTP_400_BAD_REQUEST)
+
+        user = User.objects.create_user(
+            username=username,
+            password=password,
+            email=email,
+            first_name=first_name,
+            last_name=last_name
+        )
+        return Response({"message": "User created successfully"}, status=status.HTTP_201_CREATED)
+
+# ---------------------------
+# Login API (JWT)
+# ---------------------------
+class LoginView(TokenObtainPairView):
+    permission_classes = (AllowAny,)
+
+# ---------------------------
+# Logout API
+# ---------------------------
+class LogoutView(APIView):
+    permission_classes = (IsAuthenticated,)
+
     def post(self, request):
-        email = request.data.get('email')
-        password = request.data.get('password')
-        if email is None or password is None:
-            return Response({'error': 'Please provide email and password'}, status=status.HTTP_400_BAD_REQUEST)
-
         try:
-            user = User.objects.get(email=email)
-        except User.DoesNotExist:
-            return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+            refresh_token = request.data.get("refresh")
+            token = RefreshToken(refresh_token)
+            token.blacklist()  # Requires SIMPLE_JWT blacklist enabled
+            return Response({"detail": "Logout successful"})
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
-        if not user.check_password(password):
-            return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
-
-        refresh = RefreshToken.for_user(user)
-        return Response({
-            'access': str(refresh.access_token),
-            'refresh': str(refresh),
-            'user': UserSerializer(user).data
-        })
-
-class ProfileAPIView(APIView):
-    permission_classes = [IsAuthenticated]  # Only logged-in users can access
+# ---------------------------
+# Profile API
+# ---------------------------
+class ProfileView(APIView):
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request):
-        serializer = UserSerializer(request.user)
-        return Response(serializer.data)
+        user = request.user
+        return Response({
+            "username": user.username,
+            "email": user.email,
+            "first_name": user.first_name,
+            "last_name": user.last_name,
+        })

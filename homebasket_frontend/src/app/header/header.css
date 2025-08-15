@@ -51,19 +51,29 @@
 .nav a.active {
   background-color: rgb(255, 150, 4);
 }
+.profile{
+  font-weight: bolder;
+  color: #00d807;
+  font-size: medium;
+  justify-content: space-evenly;
+}
 
-/* Profile + Logout */
 .profile-section {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 }
-.profile-section span{
- color: whitesmoke;
- font-weight: bolder;
- font-family: Georgia;
- font-size: larger;
+
+.profile-img {
+  border-radius: 50%;
+  object-fit: cover;
 }
+
+.profile-name {
+  color: white;
+  font-weight: 500;
+}
+
 
 .logout-btn {
   padding: 5px 12px;

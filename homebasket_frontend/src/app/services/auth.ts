@@ -1,65 +1,83 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '../../environments/environment';
-import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
+import { Profile } from '../model/profile.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  saveAccessToken(access: any) {
-    throw new Error('Method not implemented.');
-  }
+
   private baseUrl = environment.apiUrl;
-  private _isLoggedIn = new BehaviorSubject<boolean>(!!localStorage.getItem('access_token'));
-isLoggedIn$ = this._isLoggedIn.asObservable();
+  private USER_KEY = 'activeUser';
+  private TOKEN_KEY = 'authToken';
+  private currentUserSubject = new BehaviorSubject<string | null>(null);
+  currentUser$ = this.currentUserSubject.asObservable();
 
-  constructor(private http: HttpClient, private router: Router) { }
 
-  register(data: any): Observable<any> {
-    return this.http.post(`${this.baseUrl}/register/`, data);
+  constructor(private http: HttpClient, private router: Router) {
+
+    const token = localStorage.getItem('access_token');
+    if (token) this.fetchUsername(); // on app load
+
   }
 
-  login(data: any): Observable<any> {
-     this._isLoggedIn.next(true);
-    return this.http.post(`${this.baseUrl}/login/`, data);
+  register(userData: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}/register/`, {
+      username: userData.username,
+      password: userData.password,
+      email: userData.email,
+      first_name: userData.first_name,
+    });
   }
 
-  setTokens(access: string, refresh: string) {
-    localStorage.setItem('access_token', access);
-    localStorage.setItem('refresh_token', refresh);
+  login(username: string, password: string): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/login/`, { username, password })
+      .pipe(
+        tap(res => {
+          localStorage.setItem('access_token', res.access);
+          localStorage.setItem('refresh_token', res.refresh);
+          this.fetchUsername(); // update header after login
+        })
+      );
+  }
+
+  logout(): void {
+    const refresh = localStorage.getItem('refresh_token');
+    if (refresh) {
+      this.http.post(`${this.baseUrl}/logout/`, { refresh }).subscribe();
+    }
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('refresh_token');
+    this.currentUserSubject.next(null);
+    this.router.navigate(['/login']);
   }
 
   getAccessToken(): string | null {
     return localStorage.getItem('access_token');
   }
 
-  getRefreshToken(): Observable<any> {
-    const refresh = localStorage.getItem('refreshToken');
-
-    if (!refresh) {
-      // Clear any remaining tokens
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
-
-      // Redirect to login page
-      this.router.navigate(['/login']);
-      return throwError(() => new Error('No refresh token found'));
-    }
-
-    return this.http.post(`${this.baseUrl}/token/refresh/`, { refresh });
+  getProfile(): Observable<any> {
+    const token = localStorage.getItem('access_token'); // JWT token
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+    return this.http.get(`${this.baseUrl}/profile/`, { headers });
   }
 
-  logout() {
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('refresh_token');
-    this._isLoggedIn.next(false);
+  private fetchUsername() {
+    this.http.get<any>(`${this.baseUrl}/profile/`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem('access_token')}` },
+    }).subscribe({
+      next: (res) => {
+        // prefer first_name, fallback to username
+        const name = res.first_name?.trim() ? res.first_name : res.username;
+        this.currentUserSubject.next(name);
+      },
+      error: () => this.currentUserSubject.next(null),
+    });
   }
-
-  getProfile() {
-    return this.http.get(`${this.baseUrl}/profile/`);
-  }
-
-  
 }

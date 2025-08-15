@@ -3,7 +3,6 @@
 
     <!-- Logo + Title -->
     <div class="logo">
-
       <img src="https://img.icons8.com/nolan/64/shopping-1--v1.png" alt="shopping">
       <a href="/dashboard">
         <h1 class="h5 mb-0">Home<span class="text-danger">Basket</span></h1>
@@ -20,8 +19,12 @@
 
     <!-- Profile + Logout -->
     <div class="profile-section">
-      <span>{{ activeProfile }}</span>
-      <button *ngIf="isLoggedIn" class="logout-btn btn-sm" (click)="logout()">Logout</button>
+      <!-- Small profile image -->
+      <img width="35" height="35" src="https://img.icons8.com/fluency/48/user-male-circle--v1.png" alt="user-male-circle--v1"/>
+      <!-- Active user name -->
+      <span class="profile">{{ username }}</span>
+      <!-- Logout -->
+      <button *ngIf="username" class="logout-btn btn-sm" (click)="logout()">Logout</button>
     </div>
 
   </div>

@@ -1,45 +1,98 @@
-<div class="container">
-  <!-- Dashboard Cards -->
-  <div class="cards">
-    <div class="card">
-      <h3>120</h3>
-      <p>Total Orders</p>
+<div class="container mt-4">
+  <h2 class="mb-4">ADD ITEM</h2>
+
+  <!-- Reactive Form -->
+  <form [formGroup]="itemForm" (ngSubmit)="addItem()" class="row g-3">
+
+    <!-- Item Name -->
+    <div class="col-md-6">
+      <label for="name" class="form-label">Item Name</label>
+      <input type="text" id="name" formControlName="name" class="form-control"
+        [ngClass]="{'is-invalid': itemForm.get('name')?.invalid && itemForm.get('name')?.touched}"
+        placeholder="Enter item name" />
+      <div *ngIf="itemForm.get('name')?.invalid && itemForm.get('name')?.touched" class="invalid-feedback">
+        Item name is required.
+      </div>
     </div>
-    <div class="card">
-      <h3>80</h3>
-      <p>Customers</p>
+
+    <!-- Quantity -->
+    <div class="col-md-3">
+      <label for="qty" class="form-label">Quantity</label>
+      <input type="number" id="qty" formControlName="qty" class="form-control"
+        [ngClass]="{'is-invalid': itemForm.get('qty')?.invalid && itemForm.get('qty')?.touched}" min="1" />
+      <div *ngIf="itemForm.get('qty')?.invalid && itemForm.get('qty')?.touched" class="invalid-feedback">
+        Quantity must be at least 1.
+      </div>
     </div>
-    <div class="card">
-      <h3>15</h3>
-      <p>Categories</p>
+
+    <!-- Unit -->
+    <div class="col-md-3">
+      <label for="unit" class="form-label">Unit</label>
+      <select id="unit" formControlName="unit" class="form-select"
+        [ngClass]="{'is-invalid': itemForm.get('unit')?.invalid && itemForm.get('unit')?.touched}">
+        <option *ngFor="let u of units" [value]="u">{{ u }}</option>
+      </select>
+      <div *ngIf="itemForm.get('unit')?.invalid && itemForm.get('unit')?.touched" class="invalid-feedback">
+        Unit is required.
+      </div>
     </div>
-    <div class="card">
-      <h3>₹12,500</h3>
-      <p>Revenue</p>
+
+    <!-- Category -->
+    <div class="col-md-6">
+      <label for="category" class="form-label">Category</label>
+      <select id="category" formControlName="category" class="form-select"
+        [ngClass]="{'is-invalid': itemForm.get('category')?.invalid && itemForm.get('category')?.touched}">
+        <option value="">Select Category</option>
+        <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
+      </select>
+      <div *ngIf="itemForm.get('category')?.invalid && itemForm.get('category')?.touched" class="invalid-feedback">
+        Category is required.
+      </div>
+    </div>
+    <!-- Submit Button -->
+    <div class="col-12">
+      <button type="submit" class="btn btn-primary" [disabled]="itemForm.invalid">
+        <i class="bi bi-plus-circle"></i> ADD ITEM
+      </button>
+    </div>
+  </form>
+
+  <!-- Bootstrap Toast -->
+  <div class="toast-container position-fixed top-0 end-0 p-3">
+    <div id="successToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive"
+      aria-atomic="true">
+      <div class="d-flex">
+        <div class="toast-body">
+          ✅ Item added successfully!
+        </div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+          aria-label="Close"></button>
+      </div>
     </div>
   </div>
-
-  <!-- Add Item Section -->
-  <div class="chart">
-    <p>📋 Let's add your item here...</p>
-
-    <form [formGroup]="itemForm" (ngSubmit)="addItem()">
-      <div class="input-container">
-        <input type="text" placeholder="Enter item name" formControlName="name" />
-
-        <input type="number" formControlName="qty" min="1" placeholder="Quantity" />
-
-        <select formControlName="unit">
-          <option *ngFor="let u of units" [value]="u">{{ u }}</option>
-        </select>
-
-        <select formControlName="category">
-          <option value="">Select Category</option>
-          <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
-        </select>
-
-        <button type="submit" class="btn-add" [disabled]="itemForm.invalid">ADD</button>
-      </div>
-    </form>
+  
+  <!-- Items Table -->
+  <div class="mt-5">
+    <h3>ITEMS LIST</h3>
+    <table class="table table-bordered table-striped mt-3">
+      <thead class="table-dark">
+        <tr>
+          <th>Name</th>
+          <th>Quantity</th>
+          <th>Unit</th>
+          <th>Category</th>
+          <th>Created At</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of itemList">
+          <td>{{ item.name }}</td>
+          <td>{{ item.qty }}</td>
+          <td>{{ item.unit }}</td>
+          <td>{{ item.category }}</td>
+          <td>{{ item.created_at | date:'short' }}</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>

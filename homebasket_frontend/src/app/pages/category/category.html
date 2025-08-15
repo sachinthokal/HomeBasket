@@ -8,9 +8,8 @@
       </div>
       <div class="item-card" *ngFor="let item of Grocery">
         <div class="item-row">
-          <span>{{ item.name }}</span><span> {{ item.unit }}</span><span> {{ item.qty }}</span>
+          <span>{{ item.name }}</span><span>{{ item.qty }}</span><span> {{ item.unit }}</span>
           <div class="item-buttons">
-            <button class="btn edit" (click)="autoSave(item)">Edit</button>
             <button class="btn delete" (click)="deleteItemByIndex(item.id)">Delete</button>
           </div>
         </div>
@@ -24,9 +23,9 @@
       </div>
       <div class="item-card" *ngFor="let item of Fruits_Vegetables">
         <div class="item-row">
-          <span>{{ item.name }}</span><span> {{ item.unit }}</span><span> {{ item.qty }}</span>
+          <span>{{ item.name }}</span><span>{{ item.qty }}</span><span> {{ item.unit }}</span>
           <div class="item-buttons">
-            <button class="btn edit" (click)="autoSave(item)">Edit</button>
+
             <button class="btn delete" (click)="deleteItemByIndex(item.id)">Delete</button>
           </div>
         </div>
@@ -40,9 +39,9 @@
       </div>
       <div class="item-card" *ngFor="let item of Dairy_Beverages_Bakery">
         <div class="item-row">
-          <span>{{ item.name }}</span><span> {{ item.unit }}</span><span> {{ item.qty }}</span>
+           <span>{{ item.name }}</span><span>{{ item.qty }}</span><span> {{ item.unit }}</span>
           <div class="item-buttons">
-            <button class="btn edit" (click)="autoSave(item)">Edit</button>
+
             <button class="btn delete" (click)="deleteItemByIndex(item.id)">Delete</button>
           </div>
         </div>
@@ -52,13 +51,27 @@
     <!-- Category 4 -->
     <div class="category">
       <div class="category-header">
-        Household & Miscellaneous 🛒🏡
+        Household & Cleaning 🛒🏡
       </div>
       <div class="item-card" *ngFor="let item of Household_Cleaning">
         <div class="item-row">
-          <span>{{ item.name }}</span><span> {{ item.unit }}</span><span> {{ item.qty }}</span>
+          <span>{{ item.name }}</span><span>{{ item.qty }}</span><span> {{ item.unit }}</span>
           <div class="item-buttons">
-            <button class="btn edit" (click)="autoSave(item)">Edit</button>
+            <button class="btn delete" (click)="deleteItemByIndex(item.id)">Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Category 5 -->
+    <div class="category">
+      <div class="category-header">
+        Miscellaneous 🛒🏡
+      </div>
+      <div class="item-card" *ngFor="let item of Miscellaneous">
+        <div class="item-row">
+          <span>{{ item.name }}</span><span>{{ item.qty }}</span><span> {{ item.unit }}</span>
+          <div class="item-buttons">
             <button class="btn delete" (click)="deleteItemByIndex(item.id)">Delete</button>
           </div>
         </div>

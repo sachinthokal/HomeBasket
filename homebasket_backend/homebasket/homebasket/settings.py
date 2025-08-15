@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'corsheaders',
     'rest_framework',
+    #'rest_framework_simplejwt.token_blacklist',
     'dashboard',
     'accounts',
 ]
@@ -81,12 +82,12 @@ WSGI_APPLICATION = 'homebasket.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'homebasket',      # तुम्ही create केलेल्या database नावाने बदला
-        'USER': 'root',          # तुमचा DB user
-        'PASSWORD': 'root',  # तुमचा DB पासवर्ड
-        'HOST': 'localhost',       # DB host, localhost किंवा IP
-        'PORT': '3306',            # MySQL default port
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'homebasket',
+        'USER': 'sachin',
+        'PASSWORD': 'admin',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
@@ -136,12 +137,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ),
+    )
 }
 
 from datetime import timedelta
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'ROTATE_REFRESH_TOKENS': False,
+    'BLACKLIST_AFTER_ROTATION': False,
     # add other settings if needed
 }
