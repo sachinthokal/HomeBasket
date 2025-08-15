@@ -15,14 +15,14 @@ import { AuthGuard } from '../../guards/auth-guard';
   styleUrls: ['./dashboard.css']
 })
 export class Dashboard implements OnInit {
-  categories = ['Grocery', 'Fruits & Vegetables', 'Dairy, Beverages & Bakery', 'Household & Cleaning','Miscellaneous'];
-  units = ['KG', 'Gram', 'Litre', 'Ml','Qty', 'Pieces', 'Packs', 'Dozens', 'Bottles', 'Cans'];
+  categories = ['Grocery', 'Fruits & Vegetables', 'Dairy, Beverages & Bakery', 'Household & Cleaning', 'Miscellaneous'];
+  units = ['KG', 'Gram', 'Litre', 'Ml', 'Qty', 'Pieces', 'Packs', 'Dozens', 'Bottles', 'Cans'];
   itemForm!: FormGroup;
   itemList: Item[] = [];
   isLoggedIn = false;
- 
 
-  constructor(private fb: FormBuilder, private itemService: ItemService) {}
+
+  constructor(private fb: FormBuilder, private itemService: ItemService) { }
 
   ngOnInit(): void {
     this.isLoggedIn = true;
@@ -43,9 +43,19 @@ export class Dashboard implements OnInit {
 
   addItem() {
     if (this.itemForm.valid) {
+      // Current UTC timestamp
+      const createdAtUTC = new Date().toISOString(); // UTC for backend
+
+      // Convert UTC to IST for frontend display
+      const createdAtIST = new Date(createdAtUTC).toLocaleString('en-IN', {
+        timeZone: 'Asia/Kolkata',
+        hour12: false // 24-hour format
+      });
+
       const newItem: Item = {
         ...this.itemForm.value,
-        created_at: new Date().toISOString() // automatically set
+        created_at: createdAtUTC, // send UTC to backend
+        localTime: createdAtIST   // display IST locally
       };
 
       this.itemService.addItem(newItem).subscribe({
@@ -65,4 +75,5 @@ export class Dashboard implements OnInit {
       });
     }
   }
+
 }

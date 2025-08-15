@@ -3,8 +3,8 @@ from rest_framework.response import Response  # type: ignore
 from rest_framework import status  # type: ignore
 from django.db import connection
 from datetime import datetime
-from accounts import models
-from .models import Item
+from django.utils import timezone
+
 
 
 class ItemCreateAPIView(APIView):
@@ -34,7 +34,8 @@ class ItemCreateAPIView(APIView):
         category = data.get('category')
 
         # auto-generate created_at
-        created_at = datetime.now()  
+        created_at = timezone.now()  # UTC-aware datetime 
+        
 
         # user_id from JWT authenticated user
         user_id = request.user.id  

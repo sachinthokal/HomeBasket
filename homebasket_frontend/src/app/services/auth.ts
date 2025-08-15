@@ -12,8 +12,6 @@ import { Profile } from '../model/profile.model';
 export class AuthService {
 
   private baseUrl = environment.apiUrl;
-  private USER_KEY = 'activeUser';
-  private TOKEN_KEY = 'authToken';
   private currentUserSubject = new BehaviorSubject<string | null>(null);
   currentUser$ = this.currentUserSubject.asObservable();
 

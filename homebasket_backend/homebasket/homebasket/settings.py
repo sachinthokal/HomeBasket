@@ -115,11 +115,9 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
-
-USE_I18N = True
-
-USE_TZ = True
+# Default timezone (can be UTC, backend stores UTC automatically)
+USE_TZ = True       # must be True
+TIME_ZONE = 'UTC'   # backend default should be UTC
 
 
 # Static files (CSS, JavaScript, Images)
