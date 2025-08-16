@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Item } from '../../model/item.model';
-import { CategoryService } from '../../services/category.service';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
+import { ItemService } from '../../services/item.service';
 
 @Component({
   selector: 'app-category',
@@ -33,7 +33,7 @@ export class Category implements OnInit {
 
   units = ['KG', 'Gram', 'Litre', 'Ml', 'Pieces', 'Packs', 'Dozens', 'Bottles', 'Cans'];
 
-  constructor(private myService: CategoryService, private router: Router) { }
+  constructor(private itemService: ItemService, private router: Router) { }
 
 
   ngOnInit(): void {
@@ -43,13 +43,13 @@ export class Category implements OnInit {
 
   onload() {
 
-    //this.myService.getAllItems().subscribe((next)=> {this.itemList = next})
+    //this.itemService.getAllItems().subscribe((next)=> {this.itemList = next})
 
-    this.myService.getAllItems().subscribe((data) => { this.Grocery = (data.filter(data => data.category == 'Grocery')) });
-    this.myService.getAllItems().subscribe((data) => { this.Dairy_Beverages_Bakery = (data.filter(data => data.category == 'Dairy, Beverages & Bakery'))});
-    this.myService.getAllItems().subscribe((data) => { this.Fruits_Vegetables= (data.filter(data => data.category == 'Fruits & Vegetables')) });
-    this.myService.getAllItems().subscribe((data) => { this.Household_Cleaning= (data.filter(data => data.category == 'Household & Cleaning')) });
-     this.myService.getAllItems().subscribe((data) => { this.Miscellaneous= (data.filter(data => data.category == 'Miscellaneous')) })
+    this.itemService.getAllItems().subscribe((data) => { this.Grocery = (data.filter(data => data.category == 'Grocery')) });
+    this.itemService.getAllItems().subscribe((data) => { this.Dairy_Beverages_Bakery = (data.filter(data => data.category == 'Dairy, Beverages & Bakery'))});
+    this.itemService.getAllItems().subscribe((data) => { this.Fruits_Vegetables= (data.filter(data => data.category == 'Fruits & Vegetables')) });
+    this.itemService.getAllItems().subscribe((data) => { this.Household_Cleaning= (data.filter(data => data.category == 'Household & Cleaning')) });
+     this.itemService.getAllItems().subscribe((data) => { this.Miscellaneous= (data.filter(data => data.category == 'Miscellaneous')) })
   }
 
   toggleSidebar() {
@@ -57,13 +57,13 @@ export class Category implements OnInit {
   }
 
   autoSave(item: Item) {
-  this.myService.updateItem(item).subscribe(next => { console.log('Auto saved successfully')});
+  this.itemService.updateItem(item).subscribe(next => { console.log('Auto saved successfully')});
   console.log(item);
 }
 
   deleteItemByIndex(index: number) {
     console.log('Request from view to delete', index);
-    this.myService.deleteItem(index).subscribe((next) => { this.onload(); console.log(index, ' - Sent to DB API') })
+    this.itemService.deleteItem(index).subscribe((next) => { this.onload(); console.log(index, ' - Sent to DB API') })
   }
 
   logout() {

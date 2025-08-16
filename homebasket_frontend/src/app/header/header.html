@@ -5,22 +5,22 @@
     <div class="logo">
       <img src="https://img.icons8.com/nolan/64/shopping-1--v1.png" alt="shopping">
       <a href="/dashboard">
-        <h1 class="h5 mb-0">Home<span class="text-danger">Basket</span></h1>
+        <h1 class="h5 mb-0">HOME<span class="text-danger">BASKET</span></h1>
       </a>
     </div>
 
     <!-- Navigation -->
-    <nav class="nav">
-      <a routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Dashboard</a>
-      <a routerLink="/category" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Categories</a>
-      <a routerLink="/history" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">History</a>
-      <a routerLink="/reports" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Reports</a>
+    <nav class="nav" *ngIf="username">
+      <a routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">DASHBOARD</a>
+      <a routerLink="/category" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">CATEGORIES</a>
+      <a routerLink="/history" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">HISTORY</a>
+      <a routerLink="/manager-tasks" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">ADMIN</a>
     </nav>
 
     <!-- Profile + Logout -->
     <div class="profile-section">
       <!-- Small profile image -->
-      <img width="35" height="35" src="https://img.icons8.com/fluency/48/user-male-circle--v1.png"
+      <img  *ngIf="username" width="35" height="35" src="https://img.icons8.com/fluency/48/user-male-circle--v1.png"
         alt="user-male-circle--v1" />
       <!-- Active user name -->
       <span class="profile">{{ username }}</span>

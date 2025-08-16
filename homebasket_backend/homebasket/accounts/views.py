@@ -6,9 +6,10 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth.models import User
 from rest_framework import status
 from rest_framework_simplejwt.views import TokenObtainPairView
+from django.contrib.auth import authenticate
 
 # ---------------------------
-# User Registration (optional)
+# User Registration
 # ---------------------------
 class RegisterView(APIView):
     permission_classes = (AllowAny,)
@@ -36,8 +37,35 @@ class RegisterView(APIView):
 # ---------------------------
 # Login API (JWT)
 # ---------------------------
-class LoginView(TokenObtainPairView):
-    permission_classes = (AllowAny,)
+class LoginAPIView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        username = request.data.get('username')
+        password = request.data.get('password')
+
+        # Authenticate user
+        user = authenticate(username=username, password=password)
+
+        if user is not None:
+            # Generate tokens
+            refresh = RefreshToken.for_user(user)
+            access = refresh.access_token
+
+            return Response({
+                'refresh': str(refresh),
+                'access': str(access),
+                'user': {
+                    'id': user.id,
+                    'username': user.username,
+                    'email': user.email,
+                    'first_name': user.first_name,
+                    'last_name': user.last_name
+                }
+            }, status=status.HTTP_200_OK)
+        else:
+            return Response({'detail': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+
 
 # ---------------------------
 # Logout API
@@ -49,7 +77,6 @@ class LogoutView(APIView):
         try:
             refresh_token = request.data.get("refresh")
             token = RefreshToken(refresh_token)
-            token.blacklist()  # Requires SIMPLE_JWT blacklist enabled
             return Response({"detail": "Logout successful"})
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)

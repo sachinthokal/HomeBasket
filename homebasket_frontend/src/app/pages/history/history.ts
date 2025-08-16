@@ -4,6 +4,8 @@ import { Item } from '../../model/item.model';
 import { ItemService } from '../../services/item.service';
 import { CommonModule, DatePipe } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-history',
@@ -52,4 +54,13 @@ export class History implements OnInit {
 
   
   }
+  exportToExcel(): void {
+    const worksheet = XLSX.utils.json_to_sheet(this.itemList);
+    const workbook = { Sheets: { 'Items List': worksheet }, SheetNames: ['Items List'] };
+    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    const data: Blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+    saveAs(data, 'items_list.xlsx');
+  }
+
+
 }

@@ -4,13 +4,16 @@ import { Router } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { jwtDecode } from 'jwt-decode';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService {
+export class AuthService {   
 
-  private baseUrl = 'http://127.0.0.1:8000/api/auth';
+  private baseUrl = environment.apiUrl;
+
+
   private currentUserSubject = new BehaviorSubject<string | null>(null);
   currentUser$ = this.currentUserSubject.asObservable();
 
@@ -23,7 +26,7 @@ export class AuthService {
   }
 
   register(userData: any): Observable<any> {
-    return this.http.post(`${this.baseUrl}/register/`, {
+    return this.http.post(`${this.baseUrl}accounts/auth/register/`, {
       username: userData.username,
       password: userData.password,
       email: userData.email,
@@ -32,7 +35,7 @@ export class AuthService {
   }
 
   login(username: string, password: string): Observable<any> {
-    return this.http.post<any>(`${this.baseUrl}/login/`, { username, password })
+    return this.http.post<any>(`${this.baseUrl}accounts/auth/login/`, { username, password })
       .pipe(
         tap(res => {
           // Store JWT tokens
@@ -63,7 +66,7 @@ logout(): void {
   }
 
   if (refresh) {
-    this.http.post(`${this.baseUrl}/logout/`, { refresh }).subscribe({
+    this.http.post(`${this.baseUrl}accounts/auth/logout/`, { refresh }).subscribe({
       error: (err) => console.error('Logout API error:', err)
     });
   }
@@ -84,11 +87,11 @@ logout(): void {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
     });
-    return this.http.get(`${this.baseUrl}/profile/`, { headers });
+    return this.http.get(`${this.baseUrl}accounts/auth/profile/`, { headers });
   }
 
   private fetchUsername() {
-    this.http.get<any>(`${this.baseUrl}/profile/`, {
+    this.http.get<any>(`${this.baseUrl}accounts/auth/profile/`, {
       headers: { Authorization: `Bearer ${localStorage.getItem('access_token')}` },
     }).subscribe({
       next: (res) => {

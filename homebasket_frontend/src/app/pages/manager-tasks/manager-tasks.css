@@ -1,0 +1,94 @@
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f6fa;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #13294b;
+      padding: 15px;
+      color: white;
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    .dashboard {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 15px;
+      padding: 20px;
+    }
+
+    .card {
+      padding: 20px;
+      border-radius: 8px;
+      color: #333;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .card-icon {
+      font-size: 35px;
+    }
+
+    /* Card Colors */
+    .green {
+      background-color: #b8f5cc;
+    }
+
+    .pink {
+      background-color: #fbcce0;
+    }
+
+    .yellow {
+      background-color: #ffe9a6;
+    }
+
+    .blue {
+      background-color: #c6dbff;
+    }
+
+    .red {
+      background-color: #ffcccc;
+    }
+
+    /* Graph section */
+    .graphs {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 15px;
+      padding: 0 20px 20px;
+    }
+
+    .graph-card {
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .graph-header {
+      font-weight: bold;
+      margin-bottom: 10px;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 5px;
+    }
+
+    .chart-placeholder {
+      background: #f0f0f0;
+      height: 180px;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #999;
+      font-size: 14px;
+    }
+
+  canvas {
+  width: 100%;
+  height: 250px;
+}
