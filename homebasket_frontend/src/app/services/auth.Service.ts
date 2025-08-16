@@ -31,6 +31,7 @@ export class AuthService {
       password: userData.password,
       email: userData.email,
       first_name: userData.first_name,
+      whatsapp_number: userData.whatsapp_number,
     });
   }
 

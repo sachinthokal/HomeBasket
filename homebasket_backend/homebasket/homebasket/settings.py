@@ -160,3 +160,5 @@ SIMPLE_JWT = {
     'BLACKLIST_AFTER_ROTATION': False,
     # add other settings if needed
 }
+
+AUTH_USER_MODEL = "accounts.User"

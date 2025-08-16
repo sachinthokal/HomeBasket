@@ -24,6 +24,7 @@ export class Login implements OnInit {
   ngOnInit(): void {
     this.signupForm = this.fb.group({
       first_name: ['', [Validators.required, Validators.minLength(3)]],
+      whatsapp_number: ['', [Validators.required]],
       username: ['', [Validators.required, Validators.minLength(3)]],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required,]]
