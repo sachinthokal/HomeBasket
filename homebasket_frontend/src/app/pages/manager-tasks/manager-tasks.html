@@ -46,18 +46,16 @@
     <div class="graph-card">
       <div class="graph-header">GRAPH</div>
       <div class="chart-placeholder">
-        <button class="btn btn-success" (click)="sendWhatsApp()">
-          📲 Send WhatsApp Message
-        </button>
+         <button (click)="exportToExcel()" class="btn btn-primary">Download Grocery List</button>
       </div>
     </div>
     <div class="graph-card">
       <div class="graph-header">GRAPH</div>
-      <div class="chart-placeholder">[Views Chart]</div>
+      <div class="chart-placeholder"> <button (click)="sendList()" class="btn btn-success">Send Grocery List</button></div>
     </div>
     <div class="graph-card">
       <div class="graph-header">GRAPH</div>
-      <div class="chart-placeholder">[Likes Chart]</div>
+      <div class="chart-placeholder"><button (click)="resetGrocery()" class="btn btn-danger">Reset Grocery List</button></div>
     </div>
   </div>
 </body>

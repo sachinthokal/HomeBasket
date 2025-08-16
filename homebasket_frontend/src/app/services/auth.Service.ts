@@ -9,7 +9,7 @@ import { environment } from '../../environments/environment';
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService {   
+export class AuthService {
 
   private baseUrl = environment.apiUrl;
 
@@ -49,39 +49,47 @@ export class AuthService {
       );
   }
 
-logout(): void {
-  const access = localStorage.getItem('access_token');
-  const refresh = localStorage.getItem('refresh_token');
+  logout(): void {
+    // tokens delete कर
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("refresh_token");
+    console.log("❌ Tokens deleted");
 
-  if (access) {
-    try {
-      const decoded: any = jwtDecode(access);
-      const now = Date.now() / 1000;
-
-      if (decoded.exp && decoded.exp < now) {
-        console.warn('Access token expired. Logging out...');
-      }
-    } catch (err) {
-      console.error('Invalid token format', err);
-    }
-  }
-
-  if (refresh) {
-    this.http.post(`${this.baseUrl}accounts/auth/logout/`, { refresh }).subscribe({
-      error: (err) => console.error('Logout API error:', err)
+    // redirect force कर
+    this.router.navigate(['/login']).then(() => {
+      console.log("✅ Redirected to login");
+      window.location.reload();  // force reload for Angular state reset
     });
   }
 
-  localStorage.removeItem('access_token');
-  localStorage.removeItem('refresh_token');
-  this.currentUserSubject.next(null);
-  this.router.navigate(['/login']);
-}
-
-
+// Get the access token
   getAccessToken(): string | null {
     return localStorage.getItem('access_token');
   }
+
+  // Get token expiry timestamp (in milliseconds)
+  getTokenExpiry(): number | null {
+    const token = this.getAccessToken();
+    if (!token) return null;
+
+    try {
+      // JWT tokens are in format: header.payload.signature
+      const payloadBase64 = token.split('.')[1];
+      const payloadJson = atob(payloadBase64);
+      const payload = JSON.parse(payloadJson);
+
+      // 'exp' is in seconds → convert to milliseconds
+      if (payload.exp) {
+        return payload.exp * 1000;
+      } else {
+        return null;
+      }
+    } catch (error) {
+      console.error('Invalid token format', error);
+      return null;
+    }
+  }
+ 
 
   getProfile(): Observable<any> {
     const token = localStorage.getItem('access_token'); // JWT token

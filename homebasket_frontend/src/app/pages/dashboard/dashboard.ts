@@ -3,9 +3,10 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { CommonModule } from '@angular/common';
 import { Item } from '../../model/item.model';
 import { ItemService } from '../../services/item.service';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import * as bootstrap from 'bootstrap';
 import { AuthGuard } from '../../guards/auth-guard';
+import { AuthService } from '../../services/auth.Service';
 
 @Component({
   selector: 'app-dashboard',
@@ -22,7 +23,7 @@ export class Dashboard implements OnInit {
   isLoggedIn = false;
 
 
-  constructor(private fb: FormBuilder, private itemService: ItemService) { }
+  constructor(private fb: FormBuilder, private itemService: ItemService, private authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
     this.isLoggedIn = true;
@@ -35,7 +36,7 @@ export class Dashboard implements OnInit {
     });
   }
 
-  
+
   addItem() {
     if (this.itemForm.valid) {
       // Current UTC timestamp
