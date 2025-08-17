@@ -8,6 +8,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.db import connection
 from django.http import JsonResponse
+from rest_framework import status
 
 class DashboardCountsAPI(APIView):
     def get(self, request):
@@ -15,16 +16,16 @@ class DashboardCountsAPI(APIView):
 
         # Total Items
         with connection.cursor() as cursor:
-            cursor.execute("SELECT COUNT(*) FROM grocerylist;")  # 👈 change table name
+            cursor.execute("SELECT COUNT(*) FROM dashboard_grocerylist;")  # 👈 change table name
             data["total_items"] = cursor.fetchone()[0]
 
         # Total Users
         with connection.cursor() as cursor:
-            cursor.execute("SELECT COUNT(*) FROM auth_user;")  # default Django user table
+            cursor.execute("SELECT COUNT(*) FROM accounts_user;")  # default Django user table
             data["total_users"] = cursor.fetchone()[0]
 
         # Total Unique Categories
-            cursor.execute("SELECT COUNT(DISTINCT category) FROM grocerylist;")
+            cursor.execute("SELECT COUNT(category) FROM dashboard_grocerylist;")
             data["total_categories"] = cursor.fetchone()[0]
 
         return Response(data)
@@ -44,7 +45,7 @@ class TodayItemsCountView(View):
     def get(self, request):
         query = """
             SELECT COUNT(*) 
-            FROM grocerylist
+            FROM dashboard_grocerylist
             WHERE DATE(created_at) = %s;
         """
         today = date.today()
@@ -56,4 +57,53 @@ class TodayItemsCountView(View):
             "date": str(today),
             "total_items_added": count
         }
-        return JsonResponse([data], safe=False)
+        return JsonResponse(data)
+
+class TruncateTableAPI(APIView):
+    def delete(self, request):
+        with connection.cursor() as cursor:
+            cursor.execute("TRUNCATE TABLE dashboard_grocerylist;")
+        return Response({"message": "Table truncated successfully."}, status=status.HTTP_200_OK)
+
+class ItemHistoryAPIView(APIView):
+
+    def get(self, request):
+        user_id = request.user.id
+        if not user_id:
+            return Response({'error': 'Unauthorized'}, status=status.HTTP_401_UNAUTHORIZED)
+
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT * FROM grocerylist_backup WHERE user_id = %s", [user_id])
+            rows = cursor.fetchall()
+            columns = [col[0] for col in cursor.description]
+
+            results = []
+            for row in rows:
+                row_dict = dict(zip(columns, row))
+                if 'created_at' in row_dict and row_dict['created_at']:
+                    row_dict['created_at'] = row_dict['created_at'].isoformat()
+                results.append(row_dict)
+
+        return Response(results, status=status.HTTP_200_OK)
+
+class BackupAndDeleteOldItemsAPI(APIView):
+    def delete(self, request):
+        one_month_ago = date.today() - timedelta(days=30)
+        with connection.cursor() as cursor:
+            # Copy old records to backup table
+            cursor.execute("""
+                INSERT INTO grocerylist_backup
+                SELECT * FROM dashboard_grocerylist
+                WHERE created_at < %s;
+            """, [one_month_ago])
+
+            # Delete old records from main table
+            cursor.execute("""
+                DELETE FROM dashboard_grocerylist
+                WHERE created_at < %s;
+            """, [one_month_ago])
+
+        return Response(
+            {"message": "Old items moved to backup table and deleted from main table."},
+            status=status.HTTP_200_OK
+        )

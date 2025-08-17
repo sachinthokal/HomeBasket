@@ -1,63 +1,71 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Analytics Dashboard</title>
-</head>
-
-<body>
-
-  <header>Analytics</header>
+  <div class="container mt-4">
+  
+  <header style="text-align: center;">ANALYTICS</header>
 
   <div class="dashboard">
+    <div class="card blue">
+      <div>
+        <div style="font-size: 24px; text-align: center;"><b>TOTAL GROCERY</b></div>
+        <div style="font-size: 24px; text-align: center;"><b>{{totalItems}}</b></div>
+      </div>
+      <div class="card-icon"><img width="64" height="64" src="https://img.icons8.com/arcade/64/grocery-bag.png" alt="grocery-bag"/></div>
+    </div>
     <div class="card red">
       <div>
-        <div><b>ISSUES</b></div>
-        <div style="font-size: 24px;">3 ▲</div>
+        <div style="font-size: 24px; text-align: center;"><b>TOTAL CATEGORIES </b></div>
+        <div style="font-size: 24px; text-align: center;"><b>{{totalCategories}}</b></div>
       </div>
-      <div class="card-icon">📦</div>
+      <div class="card-icon"><img width="64" height="64" src="https://img.icons8.com/arcade/64/categorize.png" alt="categorize"/></div>
     </div>
     <div class="card blue">
       <div>
-        <div><b>ISSUES</b></div>
-        <div style="font-size: 24px;">3 ▲</div>
+        <div style="font-size: 24px; text-align: center;"><b>TOTAL USERS</b></div>
+        <div style="font-size: 24px; text-align: center;"><b>{{totalUsers}}</b></div>
       </div>
-      <div class="card-icon">📦</div>
+      <div class="card-icon"><img width="64" height="64" src="https://img.icons8.com/arcade/64/group.png" alt="group"/></div>
     </div>
     <div class="card red">
       <div>
-        <div><b>ISSUES</b></div>
-        <div style="font-size: 24px;">3 ▲</div>
+        <div style="font-size: 24px; text-align: center;"><b>{{day | uppercase}}</b></div>
+        <div style="font-size: 24px; text-align: center;"><b>{{count}}</b></div>
       </div>
-      <div class="card-icon">📦</div>
+      <div class="card-icon"><img width="64" height="64" src="https://img.icons8.com/arcade/64/calendar-1.png" alt="calendar-1"/></div>
     </div>
-    <div class="card yellow">
+  </div>
+ <header style="text-align: center;">MANAGE</header>
+<div class="dashboard">
+    <div class="card blue">
       <div>
-        <div><b>ISSUES</b></div>
-        <div style="font-size: 24px;">3 ▲</div>
+        <button class="btn btn-primary" (click)="downloadItemsPDF()">EXPORT GROCERY</button>
       </div>
-      <div class="card-icon">📦</div>
+      <div class="card-icon"><img width="48" height="48" src="https://img.icons8.com/lollipop/48/export-pdf.png" alt="export-pdf"/></div>
+    </div>
+    <div class="card blue">
+      <div>
+        <button class="btn btn-danger btn-info" (click)="alertConfirmation()">EXPORT GROCERY</button>
+      </div>
+      <div class="card-icon"><img width="64" height="64" src="https://img.icons8.com/clouds/100/delete-database.png" alt="delete-database"/></div>
     </div>
   </div>
 
-  <div class="graphs">
+
+
+
+  <!-- <div class="graphs">
     <div class="graph-card">
       <div class="graph-header">GRAPH</div>
       <div class="chart-placeholder">
-         <button (click)="exportToExcel()" class="btn btn-primary">Download Grocery List</button>
+        
       </div>
     </div>
     <div class="graph-card">
       <div class="graph-header">GRAPH</div>
-      <div class="chart-placeholder"> <button (click)="sendList()" class="btn btn-success">Send Grocery List</button></div>
+   
     </div>
     <div class="graph-card">
       <div class="graph-header">GRAPH</div>
-      <div class="chart-placeholder"><button (click)="resetGrocery()" class="btn btn-danger">Reset Grocery List</button></div>
+   
     </div>
-  </div>
-</body>
+  </div> -->
 
-</html>
+</div>

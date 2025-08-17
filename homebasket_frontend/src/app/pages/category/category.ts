@@ -49,7 +49,7 @@ export class Category implements OnInit {
     this.itemService.getAllItems().subscribe((data) => { this.Dairy_Beverages_Bakery = (data.filter(data => data.category == 'Dairy, Beverages & Bakery'))});
     this.itemService.getAllItems().subscribe((data) => { this.Fruits_Vegetables= (data.filter(data => data.category == 'Fruits & Vegetables')) });
     this.itemService.getAllItems().subscribe((data) => { this.Household_Cleaning= (data.filter(data => data.category == 'Household & Cleaning')) });
-     this.itemService.getAllItems().subscribe((data) => { this.Miscellaneous= (data.filter(data => data.category == 'Miscellaneous')) })
+    this.itemService.getAllItems().subscribe((data) => { this.Miscellaneous= (data.filter(data => data.category == 'Miscellaneous')) })
   }
 
   toggleSidebar() {

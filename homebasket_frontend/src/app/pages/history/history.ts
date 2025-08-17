@@ -30,7 +30,7 @@ export class History implements OnInit {
       category: ['', Validators.required],
     });
 
-    this.itemService.getAllItems().subscribe(items => this.itemList = items);
+    this.itemService.getItemsHistory().subscribe(items => this.itemList = items);
 
     
     if (this.itemForm.valid) {

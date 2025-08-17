@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import * as XLSX from 'xlsx';
-import { saveAs } from 'file-saver';
-import { Item } from '../../model/item.model';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 import { ItemService } from '../../services/item.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-manager-tasks',
@@ -15,28 +15,102 @@ import { ItemService } from '../../services/item.service';
 })
 export class ManagerTasks implements OnInit {
 
-itemList: Item[] = [];
+  totalItems: any;
+  totalUsers: any;
+  totalCategories: any;
 
-  constructor(private http: HttpClient, private itemService: ItemService) {}
+  day: any;
+  count: any;
 
-  ngOnInit() {
-    
-    console.log(this.itemService.getAllItems().subscribe(items => this.itemList = items))
+
+
+  constructor(private http: HttpClient, private itemService: ItemService) { }
+
+
+  ngOnInit(): void {
+    this.loadDashboardCounts();
+    this.loadTodayInfo();
+    this.loadTodayItems();
   }
 
- exportToExcel(): void {
-    const worksheet = XLSX.utils.json_to_sheet(this.itemList);
-    const workbook = { Sheets: { 'Items List': worksheet }, SheetNames: ['Grocery List'] };
-    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-    const data: Blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
-    saveAs(data, 'items_list.xlsx');
-  }
-  resetGrocery(){
-
+  loadDashboardCounts() {
+    this.itemService.getDashboardCounts().subscribe({
+      next: (res) => { this.totalItems = res.total_items, this.totalUsers = res.total_users, this.totalCategories = res.total_categories },
+      error: (err) => console.error('Error loading dashboard counts', err)
+    });
   }
 
-  sendList(){
-    
+  loadTodayInfo() {
+    this.itemService.getTodayDayNumber().subscribe({
+      next: (res) => this.day = res.day_number,
+      error: (err) => console.error('Error loading today info', err)
+    });
   }
-  
+
+  loadTodayItems() {
+    this.itemService.getTodayItemsCount().subscribe({
+      next: (res) => this.count = res.total_items_added,
+      error: (err) => console.error('Error loading today items', err)
+    });
+  }
+
+  downloadItemsPDF() {
+    console.log("Clicked")
+
+    this.itemService.getAllItems().subscribe({
+      next: (items) => {
+        const doc = new jsPDF();
+
+        doc.setFontSize(16);
+        doc.text('Grocery Items List', 14, 20);
+
+        const tableColumn = ["Item", "Quantity", "Unit", "Category", "Created At"];
+        const tableRows: any[] = [];
+
+        items.forEach(item => {
+          const row = [
+            item.name,
+            item.qty,
+            item.unit,
+            item.category,
+            item.created_at ? item.created_at.split('T')[0] : ''
+          ];
+          tableRows.push(row);
+        });
+
+        // ✅ Correct autoTable usage
+        autoTable(doc, {
+          head: [tableColumn],
+          body: tableRows,
+          startY: 30
+        });
+
+        doc.save('grocery_items.pdf');
+      },
+      error: (err) => console.error('Failed to get items', err)
+    });
+  }
+
+  alertConfirmation() {
+    Swal.fire({
+      title: 'OLD ITEMS BE GONE!',
+      text: 'IF IT’S OLDER THAN 30 DAYS, IT’S OFFICIALLY VINTAGE… AND DELETED.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'YES, PROCEED',
+      cancelButtonText: 'NO, CANCEL',
+      allowOutsideClick: false
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.itemService.truncateTable().subscribe({
+          next: () => Swal.fire('Done', 'OLD ITEMS BACKED UP AND DELETED.', 'success'),
+          error: () => Swal.fire('Error', 'SOMETHING WENT WRONG!', 'error')
+        });
+      }
+    });
+  }
+
+
+
+
 }
