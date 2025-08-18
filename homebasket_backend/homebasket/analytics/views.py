@@ -1,7 +1,6 @@
 # analytics/views.py
 from datetime import date
 from datetime import timedelta
-from django.db.models import Count
 from django.db import connection
 from django.views import View
 from rest_framework.views import APIView
@@ -9,6 +8,9 @@ from rest_framework.response import Response
 from django.db import connection
 from django.http import JsonResponse
 from rest_framework import status
+from django.utils.timezone import now
+from django.db import connection, transaction
+
 
 class DashboardCountsAPI(APIView):
     def get(self, request):
@@ -88,22 +90,25 @@ class ItemHistoryAPIView(APIView):
 
 class BackupAndDeleteOldItemsAPI(APIView):
     def delete(self, request):
-        one_month_ago = date.today() - timedelta(days=30)
-        with connection.cursor() as cursor:
-            # Copy old records to backup table
-            cursor.execute("""
-                INSERT INTO grocerylist_backup
-                SELECT * FROM dashboard_grocerylist
-                WHERE created_at < %s;
-            """, [one_month_ago])
+        one_month_ago = now() - timedelta(days=30)
 
-            # Delete old records from main table
-            cursor.execute("""
-                DELETE FROM dashboard_grocerylist
-                WHERE created_at < %s;
-            """, [one_month_ago])
+        try:
+            with transaction.atomic():
+                with connection.cursor() as cursor:
+                    cursor.execute("""
+                        INSERT INTO grocerylist_backup
+                        SELECT * FROM dashboard_grocerylist
+                        WHERE created_at < %s;
+                    """, [one_month_ago])
 
-        return Response(
-            {"message": "Old items moved to backup table and deleted from main table."},
-            status=status.HTTP_200_OK
-        )
+                    cursor.execute("""
+                        DELETE FROM dashboard_grocerylist
+                        WHERE created_at < %s;
+                    """, [one_month_ago])
+
+            return Response(
+                {"message": "Old items moved to backup table and deleted from main table."},
+                status=status.HTTP_200_OK
+            )
+        except Exception as e:
+            return Response({"error": str(e)}, status=500)

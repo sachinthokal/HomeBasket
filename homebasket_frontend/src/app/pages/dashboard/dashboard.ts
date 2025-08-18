@@ -21,6 +21,7 @@ export class Dashboard implements OnInit {
   itemForm!: FormGroup;
   itemList: Item[] = [];
   isLoggedIn = false;
+  CURRENT = new Date();
 
 
   constructor(private fb: FormBuilder, private itemService: ItemService, private authService: AuthService, private router: Router) { }
@@ -34,10 +35,14 @@ export class Dashboard implements OnInit {
       unit: ['KG', Validators.required],
       category: ['', Validators.required],
     });
+     this.loadData();
   }
 
+  loadData(){
+     this.itemService.getAllItems().subscribe(items => {this.itemList = items.filter((item: any) => !item.purchased);});
+  }
 
-  addItem() {
+   addItem() {
     if (this.itemForm.valid) {
       // Current UTC timestamp
       const createdAtUTC = new Date().toISOString(); // UTC for backend
@@ -64,6 +69,7 @@ export class Dashboard implements OnInit {
           if (toastEl) {
             const toast = new bootstrap.Toast(toastEl);
             toast.show();
+            this.loadData();
           }
         },
         error: (err) => console.error("Error saving item:", err)

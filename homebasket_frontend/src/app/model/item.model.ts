@@ -4,5 +4,6 @@ export interface Item {
   qty: number;
   unit: string;
   category: string;
-  created_at?: string;   
+  created_at?: string;  
+  purchased: boolean;
 }

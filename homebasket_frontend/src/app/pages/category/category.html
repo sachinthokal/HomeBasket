@@ -1,4 +1,5 @@
 <div class="container">
+      <h6><b>ITEMS LIST - <span>{{CURRENT | date: 'MMM yyyy' | uppercase}} </span></b></h6>
   <div class="row-space"></div>
   <div class="categories-container">
     <!-- Category 1 -->
@@ -8,8 +9,11 @@
       </div>
       <div class="item-card" *ngFor="let item of Grocery">
         <div class="item-row">
-          <span>{{ item.name }}</span><span>{{ item.qty }}</span><span> {{ item.unit }}</span>
+          <span [class.purchased]="item.purchased">
+            {{ item.name }} {{ item.qty }} {{ item.unit }}
+          </span>
           <div class="item-buttons">
+            <input type="checkbox" [checked]="item.purchased" (change)="togglePurchased(item)">
             <button class="btn delete" (click)="deleteItemByIndex(item.id)">Delete</button>
           </div>
         </div>
@@ -23,9 +27,11 @@
       </div>
       <div class="item-card" *ngFor="let item of Fruits_Vegetables">
         <div class="item-row">
-          <span>{{ item.name }}</span><span>{{ item.qty }}</span><span> {{ item.unit }}</span>
+         <span [class.purchased]="item.purchased">
+            {{ item.name }} {{ item.qty }} {{ item.unit }}
+          </span>
           <div class="item-buttons">
-
+            <input type="checkbox" [checked]="item.purchased" (change)="togglePurchased(item)">
             <button class="btn delete" (click)="deleteItemByIndex(item.id)">Delete</button>
           </div>
         </div>
@@ -38,10 +44,12 @@
         Dairy & Bakery 🍞🥛
       </div>
       <div class="item-card" *ngFor="let item of Dairy_Beverages_Bakery">
-        <div class="item-row">
-           <span>{{ item.name }}</span><span>{{ item.qty }}</span><span> {{ item.unit }}</span>
+         <div class="item-row">
+         <span [class.purchased]="item.purchased">
+            {{ item.name }} {{ item.qty }} {{ item.unit }}
+          </span>
           <div class="item-buttons">
-
+            <input type="checkbox" [checked]="item.purchased" (change)="togglePurchased(item)">
             <button class="btn delete" (click)="deleteItemByIndex(item.id)">Delete</button>
           </div>
         </div>
@@ -54,9 +62,12 @@
         Household & Cleaning 🛒🏡
       </div>
       <div class="item-card" *ngFor="let item of Household_Cleaning">
-        <div class="item-row">
-          <span>{{ item.name }}</span><span>{{ item.qty }}</span><span> {{ item.unit }}</span>
+         <div class="item-row">
+         <span [class.purchased]="item.purchased">
+            {{ item.name }} {{ item.qty }} {{ item.unit }}
+          </span>
           <div class="item-buttons">
+            <input type="checkbox" [checked]="item.purchased" (change)="togglePurchased(item)">
             <button class="btn delete" (click)="deleteItemByIndex(item.id)">Delete</button>
           </div>
         </div>
@@ -69,9 +80,12 @@
         Miscellaneous 🛒🏡
       </div>
       <div class="item-card" *ngFor="let item of Miscellaneous">
-        <div class="item-row">
-          <span>{{ item.name }}</span><span>{{ item.qty }}</span><span> {{ item.unit }}</span>
+         <div class="item-row">
+         <span [class.purchased]="item.purchased">
+            {{ item.name }} {{ item.qty }} {{ item.unit }}
+          </span>
           <div class="item-buttons">
+            <input type="checkbox" [checked]="item.purchased" (change)="togglePurchased(item)">
             <button class="btn delete" (click)="deleteItemByIndex(item.id)">Delete</button>
           </div>
         </div>

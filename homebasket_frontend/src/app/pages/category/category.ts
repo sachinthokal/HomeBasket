@@ -7,11 +7,7 @@ import { ItemService } from '../../services/item.service';
 
 @Component({
   selector: 'app-category',
-  imports: [
-    ReactiveFormsModule, 
-    CommonModule, 
-    RouterModule
-  ],
+  imports: [ ReactiveFormsModule, CommonModule, RouterModule],
   templateUrl: './category.html',
   styleUrl: './category.css'
 })
@@ -21,6 +17,7 @@ export class Category implements OnInit {
   sidebarOpen = false;
   itemList: Item[] = [];
   items: Item[] = [];
+  CURRENT = new Date();
 
   isLoggedIn: boolean = true;
 
@@ -46,10 +43,11 @@ export class Category implements OnInit {
     //this.itemService.getAllItems().subscribe((next)=> {this.itemList = next})
 
     this.itemService.getAllItems().subscribe((data) => { this.Grocery = (data.filter(data => data.category == 'Grocery')) });
-    this.itemService.getAllItems().subscribe((data) => { this.Dairy_Beverages_Bakery = (data.filter(data => data.category == 'Dairy, Beverages & Bakery'))});
-    this.itemService.getAllItems().subscribe((data) => { this.Fruits_Vegetables= (data.filter(data => data.category == 'Fruits & Vegetables')) });
-    this.itemService.getAllItems().subscribe((data) => { this.Household_Cleaning= (data.filter(data => data.category == 'Household & Cleaning')) });
-    this.itemService.getAllItems().subscribe((data) => { this.Miscellaneous= (data.filter(data => data.category == 'Miscellaneous')) })
+    this.itemService.getAllItems().subscribe((data) => { this.Dairy_Beverages_Bakery = (data.filter(data => data.category == 'Dairy, Beverages & Bakery')) });
+    this.itemService.getAllItems().subscribe((data) => { this.Fruits_Vegetables = (data.filter(data => data.category == 'Fruits & Vegetables')) });
+    this.itemService.getAllItems().subscribe((data) => { this.Household_Cleaning = (data.filter(data => data.category == 'Household & Cleaning')) });
+    this.itemService.getAllItems().subscribe((data) => { this.Miscellaneous = (data.filter(data => data.category == 'Miscellaneous')) });
+
   }
 
   toggleSidebar() {
@@ -57,9 +55,9 @@ export class Category implements OnInit {
   }
 
   autoSave(item: Item) {
-  this.itemService.updateItem(item).subscribe(next => { console.log('Auto saved successfully')});
-  console.log(item);
-}
+    this.itemService.updateItem(item).subscribe(next => { console.log('Auto saved successfully') });
+    console.log(item);
+  }
 
   deleteItemByIndex(index: number) {
     console.log('Request from view to delete', index);
@@ -73,6 +71,11 @@ export class Category implements OnInit {
     localStorage.removeItem('user');
     localStorage.removeItem('activeProfile');
     this.router.navigate(['/login']);
+  }
+
+  togglePurchased(item: any) {
+
+    this.itemService.togglePurchased(item)
   }
 
 }

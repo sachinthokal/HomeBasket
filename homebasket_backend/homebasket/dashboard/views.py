@@ -4,7 +4,6 @@ from rest_framework import status  # type: ignore
 from django.db import connection
 from django.utils import timezone
 
-
 class ItemCreateAPIView(APIView):
 
     def get(self, request):
@@ -67,3 +66,21 @@ class ItemDeleteView(APIView):
                 return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         return Response({'message': 'Item deleted'}, status=status.HTTP_204_NO_CONTENT)
+    
+
+class UpdatePurchaseStatusAPI(APIView):
+    def post(self, request, pk):
+        purchased = request.data.get("purchased", False)
+
+        try:
+            with connection.cursor() as cursor:
+                cursor.execute("""
+                    UPDATE dashboard_grocerylist
+                    SET purchased = %s
+                    WHERE id = %s;
+                """, [purchased, pk])
+
+            return Response({"success": True, "purchased": purchased}, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

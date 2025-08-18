@@ -9,6 +9,16 @@
   color:var(--text);
   overflow:hidden;
 }
+
+.overlay{
+  position:absolute; inset:-20%;
+  background:
+    conic-gradient(from 180deg at 50% 50%, rgba(56,189,248,.12), transparent 40%),
+    radial-gradient(900px 500px at 10% 120%, rgba(56,189,248,.10), transparent 60%);
+  filter: blur(60px);
+  pointer-events:none;
+}
+
 .topbar{
   display:flex; align-items:center; justify-content:center;
   padding:20px 24px;
@@ -65,10 +75,10 @@
   .cta{ width:100%; justify-content:center; }
 }
 
-/* img{
+img{
     width: 100px;
     height: 100px;
-} */
+}
 
 .word {
   opacity: 0;

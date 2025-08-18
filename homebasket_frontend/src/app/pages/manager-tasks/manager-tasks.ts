@@ -55,14 +55,14 @@ export class ManagerTasks implements OnInit {
   }
 
   downloadItemsPDF() {
-    console.log("Clicked")
+    console.log("Download From Current Month")
 
     this.itemService.getAllItems().subscribe({
       next: (items) => {
         const doc = new jsPDF();
 
         doc.setFontSize(16);
-        doc.text('Grocery Items List', 14, 20);
+        doc.text('Current Month Grocery Items List', 14, 20);
 
         const tableColumn = ["Item", "Quantity", "Unit", "Category", "Created At"];
         const tableRows: any[] = [];
@@ -85,7 +85,44 @@ export class ManagerTasks implements OnInit {
           startY: 30
         });
 
-        doc.save('grocery_items.pdf');
+        doc.save('current_grocery_items.pdf');
+      },
+      error: (err) => console.error('Failed to get items', err)
+    });
+  }
+
+  downloadHistoryItemsPDF() {
+     console.log("Download From Backup Month")
+
+    this.itemService.getItemsHistory().subscribe({
+      next: (items) => {
+        const doc = new jsPDF();
+
+        doc.setFontSize(16);
+        doc.text('Backup Grocery Items List', 14, 20);
+
+        const tableColumn = ["Item", "Quantity", "Unit", "Category", "Created At"];
+        const tableRows: any[] = [];
+
+        items.forEach(item => {
+          const row = [
+            item.name,
+            item.qty,
+            item.unit,
+            item.category,
+            item.created_at ? item.created_at.split('T')[0] : ''
+          ];
+          tableRows.push(row);
+        });
+
+        // ✅ Correct autoTable usage
+        autoTable(doc, {
+          head: [tableColumn],
+          body: tableRows,
+          startY: 30
+        });
+
+        doc.save('history_grocery_items.pdf');
       },
       error: (err) => console.error('Failed to get items', err)
     });

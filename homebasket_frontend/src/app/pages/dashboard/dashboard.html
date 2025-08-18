@@ -58,7 +58,7 @@
   </form>
 
   <!-- Bootstrap Toast -->
-  <div class="toast-container position-fixed mt-3">
+  <div class="toast-container position-fixed bottom-0 end-0 p-3">
     <div id="successToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive"
       aria-atomic="true">
       <div class="d-flex">
@@ -70,3 +70,28 @@
       </div>
     </div>
   </div>
+  <!-- Items Table -->
+  <div class="current_table">
+    <h6><b><span style="color: red;">{{CURRENT | date: 'MMM yyyy' | uppercase}}</span>  ITEMS LIST - PENDING FROM PURCHASE</b></h6>
+    <table class="table table-bordered table-striped mt-3">
+      <thead class="table-dark">
+        <tr>
+          <th>Name</th>
+          <th>Quantity</th>
+          <th>Unit</th>
+          <th>Category</th>
+          <th>Created At</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of itemList">
+          <td>{{ item.name }}</td>
+          <td>{{ item.qty }}</td>
+          <td>{{ item.unit }}</td>
+          <td>{{ item.category }}</td>
+          <td>{{ item.created_at | date:'dd/MM/yyyy, h:mm a' }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

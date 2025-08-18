@@ -24,6 +24,16 @@
   padding-bottom: 5px;
   border-bottom: 2px solid #eee;
 }
+.item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.purchased {
+  text-decoration: line-through;
+  color: green
+}
 
 .item-card {
   background: #f9f9f9;
@@ -80,4 +90,12 @@
     width: 100%;
     justify-content: flex-start;
   }
+}
+
+h6{
+  text-align: center;
+  margin-top: 10px;
+}
+h6 span{
+  color: red;
 }

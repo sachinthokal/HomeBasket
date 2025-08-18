@@ -6,16 +6,18 @@ import { AuthGuard } from './guards/auth-guard';
 import { NotFound } from './pages/not-found/not-found';
 import { History } from './pages/history/history';
 import { ManagerTasks } from './pages/manager-tasks/manager-tasks';
+import { Homepage } from './pages/homepage/homepage';
 
 export const routes: Routes = [
 
-  { path: '', redirectTo: '/login', pathMatch: 'full' }, // default route
-  { path: 'login', component: Login},
+   { path: '', redirectTo: '/homepage', pathMatch: 'full' },  // default route
+  { path: 'homepage', component: Homepage },
+  { path: 'login', component: Login },
   { path: 'dashboard', component: Dashboard, canActivate: [AuthGuard] },
-  { path: 'category', component: Category, canActivate: [AuthGuard]},
-  { path: 'history', component: History, canActivate: [AuthGuard]},
-  { path: 'manager-tasks', component: ManagerTasks, canActivate: [AuthGuard]},
-  { path: '**', redirectTo: '/not-found' }, // wildcard / 404 fallback
-  { path: 'not-found', component: NotFound},
+  { path: 'category', component: Category, canActivate: [AuthGuard] },
+  { path: 'history', component: History, canActivate: [AuthGuard] },
+  { path: 'manager-tasks', component: ManagerTasks, canActivate: [AuthGuard] },
+  { path: 'not-found', component: NotFound },
+  { path: '**', redirectTo: '/not-found' }   // wildcard / 404 fallback
 
 ];

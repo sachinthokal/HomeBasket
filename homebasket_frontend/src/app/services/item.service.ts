@@ -17,11 +17,11 @@ export class ItemService {
 
   constructor(private http: HttpClient) { }
 
-   getAllItems(): Observable<Item[]> {
+  getAllItems(): Observable<Item[]> {
     return this.http.get<Item[]>(`${this.baseUrl}dashboard/items/`);
   }
 
-   getItemsHistory(): Observable<Item[]> {
+  getItemsHistory(): Observable<Item[]> {
     return this.http.get<Item[]>(`${this.baseUrl}analytics/history-table/`);
   }
 
@@ -37,7 +37,7 @@ export class ItemService {
     return this.http.put(`${this.baseUrl}dashboard/items/${item.id}/`, item);
   }
 
-   // Total counts (items, users, categories)
+  // Total counts (items, users, categories)
   getDashboardCounts(): Observable<any> {
     return this.http.get(`${this.baseUrl}analytics/total-items/`); // Django URL
   }
@@ -55,6 +55,19 @@ export class ItemService {
   // truncateTable from DB
   truncateTable(): Observable<any> {
     return this.http.delete(`${this.baseUrl}analytics/truncate-table/`);
+  }
+
+  togglePurchased(item: any) {
+    const newStatus = !item.purchased;
+    this.http.post(`${this.baseUrl}dashboard/update-purchase/${item.id}/`, { purchased: newStatus })
+      .subscribe({
+        next: (res: any) => {
+          item.purchased = res.purchased;  // ✅ UI update
+        },
+        error: err => {
+          console.error("Failed to update purchase status", err);
+        }
+      });
   }
 
 
