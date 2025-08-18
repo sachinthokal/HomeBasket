@@ -1,15 +1,10 @@
 import { Component } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-not-found',
-  imports: [],
+  imports: [RouterModule],
   templateUrl: './not-found.html',
   styleUrl: './not-found.css'
 })
-export class NotFound {
-
-logout() {
-    localStorage.clear();
-    window.location.href = '/login';
-  }
-}
+export class NotFound {}
