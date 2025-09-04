@@ -1,5 +1,5 @@
-# Step 1: Build Angular app
-FROM node:18-alpine AS build
+# Step 1: Build Angular app with Node.js 20
+FROM node:20-alpine AS build
 
 WORKDIR /app
 
@@ -7,7 +7,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install dependencies
-RUN npm install
+RUN npm ci
 
 # Copy source code
 COPY . .
@@ -19,7 +19,7 @@ RUN npm run build --prod
 FROM nginx:alpine
 
 # Copy build output to Nginx html folder
-COPY --from=build /app/dist/your-angular-app-name /usr/share/nginx/html
+COPY --from=build /app/dist/homebasket_frontend /usr/share/nginx/html
 
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
