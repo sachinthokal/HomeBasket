@@ -12,13 +12,19 @@ services:
       - ./homebasket_backend/.env
     depends_on:
       - db
-    command: gunicorn homebasket.wsgi:application --bind 0.0.0.0:8000 --workers 3
+    command: >
+      sh -c "python manage.py migrate &&
+             gunicorn homebasket.wsgi:application --bind 0.0.0.0:8000 --workers 3"
+    networks:
+      - homebasket_net
 
-  homebasket-frontend:
+  homebasket_frontend:
     build: ./homebasket-frontend
     container_name: homebasket-frontend-app
     ports:
       - "80:80"
+    networks:
+      - homebasket_net
 
   db:
     image: postgres:15
@@ -31,7 +37,12 @@ services:
       - postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+    networks:
+      - homebasket_net
 
 volumes:
   postgres_data:
-  
+
+networks:
+  homebasket_net:
+    driver: bridge
