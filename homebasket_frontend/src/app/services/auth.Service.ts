@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
 import { jwtDecode } from 'jwt-decode';
 import { environment } from '../../environments/environment';
 
@@ -96,7 +96,18 @@ export class AuthService {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
     });
-    return this.http.get(`${this.baseUrl}accounts/auth/profile/`, { headers });
+    return this.http.get(`${this.baseUrl}accounts/auth/profile/`, { headers }).pipe(
+      catchError((error) => {
+        if (error.status === 401) {
+          console.error('Unauthorized! Token missing or expired.');
+          // 👉 इथे tu login page ला redirect karu shakto
+          // this.router.navigate(['/login']);
+        } else {
+          console.error('Error:', error);
+        }
+        return throwError(() => error);
+      })
+    );;
   }
 
   private fetchUsername() {

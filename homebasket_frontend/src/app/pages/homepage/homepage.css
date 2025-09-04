@@ -2,7 +2,7 @@
 
 .hero{
   position:relative;
-  min-height: 92.9vh;
+  min-height: 95vh;
   display:grid;
   grid-template-rows:auto 1fr auto;
   background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
