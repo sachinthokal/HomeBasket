@@ -11,4 +11,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Run Gunicorn
-CMD ["gunicorn", "homebasket.homebasket.wsgi:application", "--bind", "0.0.0.0:8000"]
+CMD ["gunicorn", "homebasket.wsgi:application", "--bind", "0.0.0.0:8000"]
