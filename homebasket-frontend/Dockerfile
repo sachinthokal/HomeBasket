@@ -5,13 +5,17 @@ WORKDIR /app
 
 # Copy package files
 COPY package*.json ./
+
+# Install dependencies + Angular CLI globally
 RUN npm install
+RUN npm install -g @angular/cli
 
 # Copy rest of the project
 COPY . .
 
 # Build Angular app
-RUN npx ng build homebasket-frontend --configuration production
+RUN ng build homebasket-frontend
+
 
 # Stage 2: Serve with Nginx
 FROM nginx:alpine
