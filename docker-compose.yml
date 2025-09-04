@@ -1,10 +1,11 @@
 version: "3.9"
 
 services:
-  django:
+  homebasket_backend:
     build: ./homebasket_backend
     container_name: homebasket_backend_app
-    command: gunicorn myproject.wsgi:application --bind 0.0.0.0:8000 --workers=4
+    environment:
+      - DJANGO_SETTINGS_MODULE=homebasket.homebasket.settings
     volumes:
       - ./homebasket_backend:/app
     ports:
@@ -14,7 +15,7 @@ services:
     depends_on:
       - db
 
-  angular:
+  homebasket_frontend:
     build: ./homebasket_frontend
     container_name: homebasket_frontend_app
     ports:
