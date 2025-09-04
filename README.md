@@ -48,10 +48,10 @@ homebasket_backend/
 └── requirements.txt
 ```
 
-### Frontend (`homebasket_frontend`)
+### Frontend (`homebasket-frontend`)
 
 ```
-homebasket_frontend/
+homebasket-frontend/
 │
 ├── src/app/
 │   ├── pages/
@@ -135,7 +135,7 @@ python manage.py runserver
 1. Navigate to frontend folder:
 
 ```bash
-cd homebasket_frontend
+cd homebasket-frontend
 ```
 
 2. Install dependencies:

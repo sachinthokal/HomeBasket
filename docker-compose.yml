@@ -14,9 +14,9 @@ services:
       - db
     command: gunicorn homebasket.wsgi:application --bind 0.0.0.0:8000 --workers 3
 
-  homebasket_frontend:
-    build: ./homebasket_frontend
-    container_name: homebasket_frontend_app
+  homebasket-frontend:
+    build: ./homebasket-frontend
+    container_name: homebasket-frontend-app
     ports:
       - "80:80"
 
