@@ -5,7 +5,7 @@ services:
     build: ./homebasket_backend
     container_name: homebasket_backend_app
     environment:
-      - DJANGO_SETTINGS_MODULE=homebasket.homebasket.settings
+      - DJANGO_SETTINGS_MODULE=homebasket.settings
     volumes:
       - ./homebasket_backend:/app
     ports:
