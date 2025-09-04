@@ -109,16 +109,16 @@ WSGI_APPLICATION = 'homebasket.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DB_NAME', 'homebasket'),        # DB नाव
-        'USER': os.environ.get('DB_USER', 'sachin'),             # DB user
-        'PASSWORD': os.environ.get('DB_PASSWORD', 'admin'),     # DB password
-        'HOST': os.environ.get('DB_HOST', 'localhost'),            # DB host
-        'PORT': os.environ.get('DB_PORT', '5432'),                 # DB port
+        'NAME': os.getenv('DB_NAME', 'homebasket'),
+        'USER': os.getenv('DB_USER', 'sachin'),
+        'PASSWORD': os.getenv('DB_PASSWORD', 'admin'),
+        'HOST': os.getenv('DB_HOST', 'db'),  # इथे localhost ऐवजी db
+        'PORT': os.getenv('DB_PORT', '5432'),
     }
 }
 
-# Password validation
-# https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
+# # Password validation
+# # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
