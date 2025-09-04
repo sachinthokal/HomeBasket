@@ -11,6 +11,8 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
+# wsgi.py
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'homebasket.settings')
+
 
 application = get_wsgi_application()

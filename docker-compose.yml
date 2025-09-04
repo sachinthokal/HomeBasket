@@ -4,8 +4,6 @@ services:
   homebasket_backend:
     build: ./homebasket_backend
     container_name: homebasket_backend_app
-    environment:
-      - DJANGO_SETTINGS_MODULE=homebasket.settings
     volumes:
       - ./homebasket_backend:/app
     ports:
@@ -14,6 +12,7 @@ services:
       - ./homebasket_backend/.env
     depends_on:
       - db
+    command: gunicorn homebasket.wsgi:application --bind 0.0.0.0:8000 --workers 3
 
   homebasket_frontend:
     build: ./homebasket_frontend
@@ -35,3 +34,4 @@ services:
 
 volumes:
   postgres_data:
+  
