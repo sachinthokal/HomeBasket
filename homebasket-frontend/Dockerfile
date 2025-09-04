@@ -20,7 +20,27 @@ RUN ng build homebasket-frontend
 # Stage 2: Serve with Nginx
 FROM nginx:alpine
 
-COPY --from=build /app/dist/homebasket-frontend /usr/share/nginx/html
+# Stage 1: Build Angular App
+FROM node:20 AS build
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm install
+
+COPY . .
+
+# Build Angular app
+RUN npm run build -- --configuration production
+
+# Stage 2: Serve with Nginx
+FROM nginx:alpine
+
+# Copy Angular dist (browser folder + index.html)
+COPY --from=build /app/dist/homebasket-frontend/browser /usr/share/nginx/html
+
+# Replace default nginx config
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
