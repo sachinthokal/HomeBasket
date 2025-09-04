@@ -7,7 +7,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install dependencies
-RUN npm ci
+RUN npm install
 
 # Copy source code
 COPY . .
@@ -20,6 +20,7 @@ FROM nginx:alpine
 
 # Copy build output to Nginx html folder
 COPY --from=build /app/dist/homebasket_frontend /usr/share/nginx/html
+
 
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
