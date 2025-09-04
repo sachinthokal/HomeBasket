@@ -112,7 +112,7 @@ DATABASES = {
         'NAME': os.getenv('DB_NAME', 'homebasket'),
         'USER': os.getenv('DB_USER', 'sachin'),
         'PASSWORD': os.getenv('DB_PASSWORD', 'admin'),
-        'HOST': os.getenv('DB_HOST', 'db'),  # इथे localhost ऐवजी db
+        'HOST': os.getenv('DB_HOST', 'localhost'),  # इथे localhost ऐवजी db
         'PORT': os.getenv('DB_PORT', '5432'),
     }
 }
