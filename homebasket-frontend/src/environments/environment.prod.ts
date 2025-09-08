@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  apiUrl: 'http://homebasket_backend:8000/',
+  apiUrl: '/api/',   // proxy path (Nginx handles it)
   appName: 'HomeBasket',
   debug: false
 };
