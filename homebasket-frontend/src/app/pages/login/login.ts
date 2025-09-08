@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.Service';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -53,6 +54,7 @@ export class Login implements OnInit {
         },
         error: (err) => {
           console.log('Signup Error:', err);
+          console.log(environment.apiUrl)
           Swal.fire('Error', 'Registration failed', 'error');
           this.serverErrors = err.error;
         }

@@ -1,5 +1,4 @@
 version: "3.9"
-
 services:
   homebasket_backend:
     build: ./homebasket_backend
@@ -12,9 +11,6 @@ services:
       - ./homebasket_backend/.env
     depends_on:
       - db
-    command: >
-      sh -c "python manage.py migrate &&
-             gunicorn homebasket.wsgi:application --bind 0.0.0.0:8000 --workers 3"
     networks:
       - homebasket_net
 
