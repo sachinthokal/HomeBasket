@@ -1,4 +1,5 @@
 version: "3.9"
+
 services:
   homebasket_backend:
     build: ./homebasket_backend
@@ -16,9 +17,11 @@ services:
 
   homebasket_frontend:
     build: ./homebasket-frontend
-    container_name: homebasket-frontend-app
+    container_name: homebasket_frontend_app
     ports:
-      - "80:80"
+      - "4200:80"   # Angular app ला 4200 वर access करायला सोपं
+    depends_on:
+      - homebasket_backend
     networks:
       - homebasket_net
 
