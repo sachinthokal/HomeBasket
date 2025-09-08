@@ -1,8 +1,4 @@
-// dev config
-// src/environments/environment.ts
 export const environment = {
-  production: false,
-  apiUrl: '/api/',   // 👈 अब्सोल्यूट path वापरायचा
-  appName: 'HomeBasket (Dev)',
-  debug: true
+  production: true,
+  apiUrl: '/api/'   // frontend la backend URL /api/ path var call karaycha
 };

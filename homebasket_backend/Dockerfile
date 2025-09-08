@@ -1,17 +1,21 @@
-FROM python:3.10-slim
+# Stage 1: Base image
+FROM python:3.12-slim
 
-# Set work directory
+# Set workdir
 WORKDIR /app
 
-# Install dependencies
+# Copy requirements
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy project files
+# Install dependencies
+RUN pip install --upgrade pip
+RUN pip install -r requirements.txt
+
+# Copy backend code
 COPY . .
 
 # Expose port
 EXPOSE 8000
 
-# Run migrations + start Gunicorn
-CMD ["sh", "-c", "python manage.py migrate && gunicorn homebasket.wsgi:application --bind 0.0.0.0:8000 --workers 3"]
+# Start server
+CMD ["gunicorn", "homebasket.wsgi:application", "--bind", "0.0.0.0:8000"]

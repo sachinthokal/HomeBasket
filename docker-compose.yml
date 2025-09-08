@@ -1,47 +1,29 @@
-version: "3.9"
-
+version: '3'
 services:
-  homebasket_backend:
+  backend:
     build: ./homebasket_backend
-    container_name: homebasket_backend_app
-    volumes:
-      - ./homebasket_backend:/app
     ports:
       - "8000:8000"
-    env_file:
-      - ./homebasket_backend/.env
+    environment:
+      - POSTGRES_DB=homebasket
+      - POSTGRES_USER=sachin
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_HOST=db
     depends_on:
       - db
-    networks:
-      - homebasket_net
 
-  homebasket_frontend:
-    build: ./homebasket-frontend
-    container_name: homebasket_frontend_app
+  frontend:
+    build: ./homebasket_frontend
     ports:
-      - "4200:80"   # Angular app ला 4200 वर access करायला सोपं
+      - "80:80"
     depends_on:
-      - homebasket_backend
-    networks:
-      - homebasket_net
+      - backend
 
   db:
-    image: postgres:15
-    container_name: postgres_db
+    image: postgres:16
     environment:
       POSTGRES_DB: homebasket
       POSTGRES_USER: sachin
       POSTGRES_PASSWORD: admin
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
-    networks:
-      - homebasket_net
-
-volumes:
-  postgres_data:
-
-networks:
-  homebasket_net:
-    driver: bridge
