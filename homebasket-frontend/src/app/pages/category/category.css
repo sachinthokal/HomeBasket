@@ -18,7 +18,7 @@
 }
 
 .category-header {
-  font-size: 0.97rem;
+  font-size: 0.96rem;
   font-weight: bold;
   text-align: center;
   margin-bottom: 10px;;
@@ -101,3 +101,14 @@ h6{
 h6 span{
   color: red;
 }
+
+/* .scrolling-text {
+  display: inline-block;
+  white-space: nowrap;
+  animation: scroll 10s linear infinite;
+}
+
+@keyframes scroll {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+} */
