@@ -1,29 +1,37 @@
-version: '3'
-services:
-  backend:
-    build: ./homebasket_backend
-    ports:
-      - "8000:8000"
-    environment:
-      - POSTGRES_DB=homebasket
-      - POSTGRES_USER=sachin
-      - POSTGRES_PASSWORD=admin
-      - POSTGRES_HOST=db
-    depends_on:
-      - db
+version: '3.9'
 
+services:
   frontend:
-    build: ./homebasket_frontend
+    build:
+      context: ./homebasket-frontend
     ports:
-      - "80:80"
+      - "8080:80"
     depends_on:
       - backend
 
-  db:
-    image: postgres:16
+  backend:
+    build:
+      context: ./homebasket_backend
+    ports:
+      - "8000:8000"
     environment:
       POSTGRES_DB: homebasket
       POSTGRES_USER: sachin
       POSTGRES_PASSWORD: admin
+      POSTGRES_HOST: db   # important: db service ला connect होण्यासाठी
+    depends_on:
+      - db
+
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: homebasket
+      POSTGRES_USER: sachin
+      POSTGRES_PASSWORD: admin
+    volumes:
+      - db_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+
+volumes:
+  db_data:

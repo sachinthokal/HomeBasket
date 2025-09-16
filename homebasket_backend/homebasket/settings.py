@@ -64,7 +64,6 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:80",
 ]
 
-
 CORS_ALLOW_CREDENTIALS = True  # important for withCredentials
 
 CORS_ALLOW_METHODS = [
@@ -113,11 +112,11 @@ WSGI_APPLICATION = 'homebasket.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('DB_NAME', 'homebasket'),
-        'USER': os.getenv('DB_USER', 'sachin'),
-        'PASSWORD': os.getenv('DB_PASSWORD', 'admin'),
-        'HOST': os.getenv('DB_HOST', 'localhost'),  # इथे localhost ऐवजी db
-        'PORT': os.getenv('DB_PORT', '5432'),
+        'NAME': os.environ.get('POSTGRES_DB', 'homebasket'),
+        'USER': os.environ.get('POSTGRES_USER', 'sachin'),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'admin'),
+        'HOST': os.environ.get('POSTGRES_HOST', 'db'),  # db = docker-compose service name
+        'PORT': os.environ.get('POSTGRES_PORT', '5432'),
     }
 }
 
