@@ -1,86 +1,82 @@
-from rest_framework.views import APIView  # type: ignore
-from rest_framework.response import Response  # type: ignore
-from rest_framework import status  # type: ignore
-from django.db import connection
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
 from django.utils import timezone
+from .models import GroceryList
+
 
 class ItemCreateAPIView(APIView):
 
     def get(self, request):
-        user_id = request.user.id
-        if not user_id:
+        user = request.user
+        if not user or not user.is_authenticated:
             return Response({'error': 'Unauthorized'}, status=status.HTTP_401_UNAUTHORIZED)
 
-        with connection.cursor() as cursor:
-            cursor.execute("SELECT * FROM dashboard_grocerylist WHERE user_id = %s", [user_id])
-            rows = cursor.fetchall()
-            columns = [col[0] for col in cursor.description]
+        items = GroceryList.objects.filter(user=user).order_by("-created_at")
+        results = []
 
-            results = []
-            for row in rows:
-                row_dict = dict(zip(columns, row))
-                if 'created_at' in row_dict and row_dict['created_at']:
-                    row_dict['created_at'] = row_dict['created_at'].isoformat()
-                results.append(row_dict)
+        for item in items:
+            results.append({
+                "id": item.id,
+                "name": item.name,
+                "qty": str(item.qty),
+                "unit": item.unit,
+                "category": item.category,
+                "purchased": item.purchased,
+                "created_at": item.created_at.isoformat(),
+            })
 
         return Response(results, status=status.HTTP_200_OK)
 
     def post(self, request):
-        data = request.data
-        name = data.get('name')
-        qty = data.get('qty')
-        unit = data.get('unit')
-        category = data.get('category')
-        created_at = timezone.now()
-        user_id = request.user.id
-
-        if not user_id:
+        user = request.user
+        if not user or not user.is_authenticated:
             return Response({'error': 'Unauthorized'}, status=status.HTTP_401_UNAUTHORIZED)
+
+        data = request.data
+        name = data.get("name")
+        qty = data.get("qty")
+        unit = data.get("unit")
+        category = data.get("category")
 
         if not name or qty is None or not category:
             return Response({'error': 'Missing required fields'}, status=status.HTTP_400_BAD_REQUEST)
 
-        with connection.cursor() as cursor:
-            try:
-                cursor.execute("""
-                    INSERT INTO dashboard_grocerylist (name, qty, unit, category, user_id, created_at)
-                    VALUES (%s, %s, %s, %s, %s, %s)
-                """, [name, qty, unit, category, user_id, created_at])
-            except Exception as e:
-                return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-        return Response({'message': 'Item inserted successfully'}, status=status.HTTP_201_CREATED)
+        try:
+            GroceryList.objects.create(
+                name=name,
+                qty=qty,
+                unit=unit,
+                category=category,
+                user=user,
+                created_at=timezone.now()
+            )
+            return Response({'message': 'Item inserted successfully'}, status=status.HTTP_201_CREATED)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class ItemDeleteView(APIView):
     def delete(self, request, pk, format=None):
-        with connection.cursor() as cursor:
-            cursor.execute("SELECT * FROM dashboard_grocerylist WHERE id = %s", [pk])
-            row = cursor.fetchone()
-            if not row:
-                return Response({'error': 'Item not found'}, status=status.HTTP_404_NOT_FOUND)
+        try:
+            item = GroceryList.objects.get(pk=pk)
+        except GroceryList.DoesNotExist:
+            return Response({'error': 'Item not found'}, status=status.HTTP_404_NOT_FOUND)
 
-            try:
-                cursor.execute("DELETE FROM dashboard_grocerylist WHERE id = %s", [pk])
-            except Exception as e:
-                return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
+        item.delete()
         return Response({'message': 'Item deleted'}, status=status.HTTP_204_NO_CONTENT)
-    
+
 
 class UpdatePurchaseStatusAPI(APIView):
     def post(self, request, pk):
         purchased = request.data.get("purchased", False)
 
         try:
-            with connection.cursor() as cursor:
-                cursor.execute("""
-                    UPDATE dashboard_grocerylist
-                    SET purchased = %s
-                    WHERE id = %s;
-                """, [purchased, pk])
-
-            return Response({"success": True, "purchased": purchased}, status=status.HTTP_200_OK)
-
+            item = GroceryList.objects.get(pk=pk)
+            item.purchased = purchased
+            item.save()
+            return Response({"success": True, "purchased": item.purchased}, status=status.HTTP_200_OK)
+        except GroceryList.DoesNotExist:
+            return Response({'error': 'Item not found'}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

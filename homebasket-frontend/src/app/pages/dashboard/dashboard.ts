@@ -22,6 +22,7 @@ export class Dashboard implements OnInit {
   itemList: Item[] = [];
   isLoggedIn = false;
   CURRENT = new Date();
+  // purchased : boolean = false;
 
 
   constructor(private fb: FormBuilder, private itemService: ItemService, private authService: AuthService, private router: Router) { }
@@ -34,6 +35,7 @@ export class Dashboard implements OnInit {
       qty: [1, [Validators.required, Validators.min(1)]],
       unit: ['KG', Validators.required],
       category: ['', Validators.required],
+      purchased: ['false'],
     });
      this.loadData();
   }
@@ -56,7 +58,7 @@ export class Dashboard implements OnInit {
       const newItem: Item = {
         ...this.itemForm.value,
         created_at: createdAtUTC, // send UTC to backend
-        localTime: createdAtIST   // display IST locally
+        localTime: createdAtIST ,  // display IST locally
       };
 
       this.itemService.addItem(newItem).subscribe({

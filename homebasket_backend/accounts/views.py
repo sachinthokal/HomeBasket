@@ -1,20 +1,16 @@
-# views.py
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework import status
-# from django.contrib.auth import authenticate
 from django.contrib.auth import authenticate, get_user_model
-from django.contrib.auth.hashers import make_password
-from accounts.models import User
 
 User = get_user_model()
+
 
 # ---------------------------
 # User Registration
 # ---------------------------
-# ✅ Register API
 class RegisterView(APIView):
     permission_classes = [AllowAny]
 
@@ -25,26 +21,35 @@ class RegisterView(APIView):
         email = data.get("email")
         first_name = data.get("first_name", "")
         last_name = data.get("last_name", "")
-        whatsapp_number  = data.get("whatsapp_number", "")
+        whatsapp_number = data.get("whatsapp_number", "")
 
-        # check username exists
+        if not username or not password or not email:
+            return Response(
+                {"error": "Username, password and email are required"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         if User.objects.filter(username=username).exists():
-            return Response({"error": "Username already exists"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"error": "Username already exists"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
-        # create user with hashed password
-        user = User.objects.create(
+        # ✅ use create_user to handle password hashing properly
+        user = User.objects.create_user(
             username=username,
-            password=make_password(password),
+            password=password,
             email=email,
             first_name=first_name,
             last_name=last_name,
-            whatsapp_number = whatsapp_number,
+            whatsapp_number=whatsapp_number,
         )
 
         return Response(
             {"message": "User created successfully", "id": user.id},
             status=status.HTTP_201_CREATED,
         )
+
 
 # ---------------------------
 # Login API (JWT)
@@ -53,30 +58,39 @@ class LoginAPIView(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
-        username = request.data.get('username')
-        password = request.data.get('password')
+        username = request.data.get("username")
+        password = request.data.get("password")
 
-        # Authenticate user
+        if not username or not password:
+            return Response(
+                {"detail": "Username and password required"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         user = authenticate(username=username, password=password)
 
         if user is not None:
-            # Generate tokens
             refresh = RefreshToken.for_user(user)
-            access = refresh.access_token
-
-            return Response({
-                'refresh': str(refresh),
-                'access': str(access),
-                'user': {
-                    'id': user.id,
-                    'username': user.username,
-                    'email': user.email,
-                    'first_name': user.first_name,
-                    'last_name': user.last_name
-                }
-            }, status=status.HTTP_200_OK)
+            return Response(
+                {
+                    "refresh": str(refresh),
+                    "access": str(refresh.access_token),
+                    "user": {
+                        "id": user.id,
+                        "username": user.username,
+                        "email": user.email,
+                        "first_name": user.first_name,
+                        "last_name": user.last_name,
+                        "whatsapp_number": getattr(user, "whatsapp_number", None),
+                    },
+                },
+                status=status.HTTP_200_OK,
+            )
         else:
-            return Response({'detail': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+            return Response(
+                {"detail": "Invalid credentials"},
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
 
 
 # ---------------------------
@@ -88,10 +102,19 @@ class LogoutView(APIView):
     def post(self, request):
         try:
             refresh_token = request.data.get("refresh")
+            if not refresh_token:
+                return Response(
+                    {"error": "Refresh token required"},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
             token = RefreshToken(refresh_token)
-            return Response({"detail": "Logout successful"})
+            token.blacklist()  # ✅ Properly blacklist the token
+
+            return Response({"detail": "Logout successful"}, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
 
 # ---------------------------
 # Profile API
@@ -101,9 +124,14 @@ class ProfileView(APIView):
 
     def get(self, request):
         user = request.user
-        return Response({
-            "username": user.username,
-            "email": user.email,
-            "first_name": user.first_name,
-            "last_name": user.last_name,
-        })
+        return Response(
+            {
+                "id": user.id,
+                "username": user.username,
+                "email": user.email,
+                "first_name": user.first_name,
+                "last_name": user.last_name,
+                "whatsapp_number": getattr(user, "whatsapp_number", None),
+            },
+            status=status.HTTP_200_OK,
+        )
