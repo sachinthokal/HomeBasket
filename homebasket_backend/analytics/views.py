@@ -54,13 +54,13 @@ class ItemHistoryAPIView(APIView):
         results = [
             {
                 "id": item.id,
-                "item_name": item.item_name,  # ✅ corrected
+                "item_name": item.item_name,
                 "qty": str(item.qty),
                 "unit": item.unit,
                 "category": item.category,
                 "purchased": item.purchased,
-                "backup_date": item.backup_date.isoformat(),
-                "created_at": item.created_at.isoformat(),
+                "backup_date": item.backup_date.replace(microsecond=0).isoformat(),
+                "created_at": item.created_at.replace(microsecond=0).isoformat(),
             }
             for item in items
         ]
@@ -73,8 +73,15 @@ class BackupAndDeleteOldItemsAPI(APIView):
         try:
             with transaction.atomic():
                 old_items = GroceryList.objects.filter(created_at__lt=one_month_ago)
+                old_count = old_items.count()
 
-                # backup तयार करणे
+                if old_count == 0:
+                    return Response(
+                        {"message": "No old items to backup/delete."},
+                        status=status.HTTP_200_OK,
+                    )
+
+                # Backup तयार करणे
                 backups = [
                     GroceryListBackup(
                         item_name=item.item_name,
@@ -82,20 +89,22 @@ class BackupAndDeleteOldItemsAPI(APIView):
                         unit=item.unit,
                         category=item.category,
                         purchased=item.purchased,
-                        backup_date=item.created_at,  # original created time
+                        backup_date=item.created_at.replace(microsecond=0),  # clean timestamp
                         user=item.user,
-                        created_at=item.created_at,   # backup record timestamp
+                        created_at=item.created_at.replace(microsecond=0),   # clean timestamp
                     )
                     for item in old_items
                 ]
 
                 GroceryListBackup.objects.bulk_create(backups)
 
-                # delete करणे
+                # Delete old items
                 old_items.delete()
 
             return Response(
-                {"message": "Old items moved to backup table and deleted from main table."},
+                {
+                    "message": f"{old_count} old items moved to backup table and deleted from main table."
+                },
                 status=status.HTTP_200_OK,
             )
         except Exception as e:

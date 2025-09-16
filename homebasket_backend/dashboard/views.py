@@ -23,7 +23,8 @@ class ItemCreateAPIView(APIView):
                 "unit": item.unit,
                 "category": item.category,
                 "purchased": item.purchased,
-                "created_at": item.created_at.isoformat(),
+                # remove microseconds for frontend display
+                "created_at": item.created_at.replace(microsecond=0).isoformat(),
             })
 
         return Response(results, status=status.HTTP_200_OK)
@@ -43,13 +44,14 @@ class ItemCreateAPIView(APIView):
             return Response({'error': 'Missing required fields'}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
+            # truncate microseconds when saving
             GroceryList.objects.create(
                 item_name=item_name,
                 qty=qty,
                 unit=unit,
                 category=category,
                 user=user,
-                created_at=timezone.now()
+                created_at=timezone.now().replace(microsecond=0)
             )
             return Response({'message': 'Item inserted successfully'}, status=status.HTTP_201_CREATED)
         except Exception as e:

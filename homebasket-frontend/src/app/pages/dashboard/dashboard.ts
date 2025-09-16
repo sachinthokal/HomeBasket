@@ -58,7 +58,7 @@ export class Dashboard implements OnInit {
       const newItem: Item = {
         ...this.itemForm.value,
         created_at: createdAtUTC, // send UTC to backend
-        localTime: createdAtIST ,  // display IST locally
+        // localTime: createdAtIST ,  // display IST locally
       };
 
       this.itemService.addItem(newItem).subscribe({
