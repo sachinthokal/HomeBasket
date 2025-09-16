@@ -10,7 +10,7 @@
       <div class="item-card" *ngFor="let item of Grocery">
         <div class="item-row">
           <span [class.purchased]="item.purchased">
-            {{ item.name }} {{ item.qty }} {{ item.unit }}
+            {{ item.item_name }} {{ item.qty }} {{ item.unit }}
           </span>
           <div class="item-buttons">
             <input type="checkbox" [checked]="item.purchased" (change)="togglePurchased(item)">
@@ -28,7 +28,7 @@
       <div class="item-card" *ngFor="let item of Fruits_Vegetables">
         <div class="item-row">
          <span [class.purchased]="item.purchased">
-            {{ item.name }} {{ item.qty }} {{ item.unit }}
+            {{ item.item_name }} {{ item.qty }} {{ item.unit }}
           </span>
           <div class="item-buttons">
             <input type="checkbox" [checked]="item.purchased" (change)="togglePurchased(item)">
@@ -46,7 +46,7 @@
       <div class="item-card" *ngFor="let item of Dairy_Beverages_Bakery">
          <div class="item-row">
          <span [class.purchased]="item.purchased">
-            {{ item.name }} {{ item.qty }} {{ item.unit }}
+            {{ item.item_name }} {{ item.qty }} {{ item.unit }}
           </span>
           <div class="item-buttons">
             <input type="checkbox" [checked]="item.purchased" (change)="togglePurchased(item)">
@@ -64,7 +64,7 @@
       <div class="item-card" *ngFor="let item of Household_Cleaning">
          <div class="item-row">
          <span [class.purchased]="item.purchased">
-            {{ item.name }} {{ item.qty }} {{ item.unit }}
+            {{ item.item_name }} {{ item.qty }} {{ item.unit }}
           </span>
           <div class="item-buttons">
             <input type="checkbox" [checked]="item.purchased" (change)="togglePurchased(item)">
@@ -82,7 +82,7 @@
       <div class="item-card" *ngFor="let item of Miscellaneous">
          <div class="item-row">
          <span [class.purchased]="item.purchased">
-            {{ item.name }} {{ item.qty }} {{ item.unit }}
+            {{ item.item_name }} {{ item.qty }} {{ item.unit }}
           </span>
           <div class="item-buttons">
             <input type="checkbox" [checked]="item.purchased" (change)="togglePurchased(item)">

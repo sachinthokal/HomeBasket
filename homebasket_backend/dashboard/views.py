@@ -18,7 +18,7 @@ class ItemCreateAPIView(APIView):
         for item in items:
             results.append({
                 "id": item.id,
-                "name": item.name,
+                "item_name": item.item_name,
                 "qty": str(item.qty),
                 "unit": item.unit,
                 "category": item.category,
@@ -34,17 +34,17 @@ class ItemCreateAPIView(APIView):
             return Response({'error': 'Unauthorized'}, status=status.HTTP_401_UNAUTHORIZED)
 
         data = request.data
-        name = data.get("name")
+        item_name = data.get("name")
         qty = data.get("qty")
         unit = data.get("unit")
         category = data.get("category")
 
-        if not name or qty is None or not category:
+        if not item_name or qty is None or not category:
             return Response({'error': 'Missing required fields'}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
             GroceryList.objects.create(
-                name=name,
+                item_name=item_name,
                 qty=qty,
                 unit=unit,
                 category=category,

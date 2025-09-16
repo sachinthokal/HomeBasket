@@ -69,7 +69,7 @@ export class ManagerTasks implements OnInit {
 
         items.forEach(item => {
           const row = [
-            item.name,
+            item.item_name,
             item.qty,
             item.unit,
             item.category,
@@ -106,7 +106,7 @@ export class ManagerTasks implements OnInit {
 
         items.forEach(item => {
           const row = [
-            item.name,
+            item.item_name,
             item.qty,
             item.unit,
             item.category,

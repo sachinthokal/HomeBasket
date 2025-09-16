@@ -14,10 +14,11 @@
   border-radius: 8px;
   padding: 15px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  border: 1px solid black;
 }
 
 .category-header {
-  font-size: 1.0rem;
+  font-size: 0.97rem;
   font-weight: bold;
   text-align: center;
   margin-bottom: 10px;;
@@ -40,6 +41,7 @@
   border-radius: 6px;
   padding: 8px;
   margin-bottom: 8px;
+  border: 1px solid rgb(154, 152, 152);
 }
 
 .item-row {

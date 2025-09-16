@@ -54,11 +54,12 @@ class ItemHistoryAPIView(APIView):
         results = [
             {
                 "id": item.id,
-                "name": item.name,
+                "item_name": item.item_name,  # ✅ corrected
                 "qty": str(item.qty),
                 "unit": item.unit,
                 "category": item.category,
                 "purchased": item.purchased,
+                "backup_date": item.backup_date.isoformat(),
                 "created_at": item.created_at.isoformat(),
             }
             for item in items
@@ -76,16 +77,18 @@ class BackupAndDeleteOldItemsAPI(APIView):
                 # backup तयार करणे
                 backups = [
                     GroceryListBackup(
-                        name=item.name,
+                        item_name=item.item_name,
                         qty=item.qty,
                         unit=item.unit,
                         category=item.category,
                         purchased=item.purchased,
-                        created_at=item.created_at,
+                        backup_date=item.created_at,  # original created time
                         user=item.user,
+                        created_at=item.created_at,   # backup record timestamp
                     )
                     for item in old_items
                 ]
+
                 GroceryListBackup.objects.bulk_create(backups)
 
                 # delete करणे
