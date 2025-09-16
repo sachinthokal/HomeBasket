@@ -72,7 +72,7 @@ export class Login implements OnInit {
           next: (res: any) => {
 
             //console.log('Login Success:', res);
-            Swal.fire('Success', 'Login successful!', 'success');
+            Swal.fire('SUCCESS', 'LOGIN SUCCESSFUL !!', 'success');
             this.router.navigate(['/dashboard'], { replaceUrl: true });
           },
           error: (err: any) => {
