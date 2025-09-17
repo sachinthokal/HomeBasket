@@ -65,14 +65,14 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:4200",  # Angular frontend
     "http://localhost:80",
     "http://localhost",  
     "http://127.0.0.1:80",
+    "https://homebasket.up.railway.app",
 ]
-
-CORS_ALLOW_CREDENTIALS = True  # important for withCredentials
 
 CORS_ALLOW_METHODS = [
     'GET',
