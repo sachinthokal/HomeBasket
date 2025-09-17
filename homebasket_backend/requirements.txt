@@ -20,3 +20,4 @@ tzdata==2025.2
 urllib3==2.5.0
 yarg==0.1.10
 gunicorn
+dj-database-url
