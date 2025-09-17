@@ -1,11 +1,6 @@
 # HomeBasket 🛒
 
-\
-\
-\
-
-
-**HomeBasket** is a full-stack grocery management web app built with **Angular** (frontend), **Django + Django REST Framework** (backend), and **PostgreSQL** (database). It allows users to login, manage items, view dashboards, and track groceries with ease.
+**HomeBasket** is a full-stack grocery management web app built with **Angular** (frontend), **Python + Django REST Framework** (backend), and **PostgreSQL** (database). It allows users to register, login, manage grocery items, view dashboards, and track inventory with ease.
 
 ---
 
@@ -13,11 +8,10 @@
 
 - JWT-based user authentication (login/logout)
 - Dashboard to add, view, and delete grocery items
-- Categorized items and multiple units (kg, pcs, liters, etc.)
-- Auto-records item creation date (`created_at`)
-- Responsive UI with Angular + Bootstrap
-- Protected routes using **AuthGuard**
-- Fully reactive header displaying `first_name` or `username`
+- Categorized items with multiple units (kg, pcs, liters, etc.)
+- Responsive UI using Angular + Bootstrap
+- Protected routes with **AuthGuard**
+- Reactive header showing user's `first_name`
 
 ---
 
@@ -25,12 +19,12 @@
 
 | Layer       | Technology                           |
 | ----------- | ------------------------------------ |
-| Frontend    | Angular 16, Bootstrap, TypeScript    |
+| Frontend    | Angular 17+, TypeScript, Bootstrap    |
 | Backend     | Django 4, Django REST Framework      |
-| Database    | PostgreSQL 15                        |
-| Auth        | JWT (JSON Web Tokens)                |
+| Database    | PostgreSQL 15+                        |
+| Authentication | JWT (JSON Web Tokens)             |
 | HTTP Client | Angular HttpClient                   |
-| State Mgmt  | BehaviorSubject for reactive profile |
+| State Management | BehaviorSubject for reactive profile |
 
 ---
 
@@ -70,9 +64,13 @@ homebasket-frontend/
 
 ## ⚡ Screenshots / Demo
 
-\
-\
-
+*![alt text](/Plan%20&%20Design/image.png)*
+*![alt text](/Plan%20&%20Design/image-1.png)*
+*![alt text](/Plan%20&%20Design/image-2.png)*
+*![alt text](/Plan%20&%20Design/image-3.png)*
+*![alt text](/Plan%20&%20Design/image-4.png)*
+*![alt text](/Plan%20&%20Design/image-5.png)*
+*![alt text](/Plan%20&%20Design/image-6.png)*
 
 ---
 
@@ -80,7 +78,7 @@ homebasket-frontend/
 
 ### Backend (Django + PostgreSQL)
 
-1. Create virtual environment:
+1. **Create virtual environment**:
 
 ```bash
 python -m venv venv
@@ -88,13 +86,13 @@ source venv/bin/activate   # Linux/Mac
 venv\Scripts\activate      # Windows
 ```
 
-2. Install requirements:
+2. **Install dependencies**:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-3. Configure PostgreSQL in `homebasket/settings.py`:
+3. **Configure PostgreSQL** in `homebasket/settings.py`:
 
 ```python
 DATABASES = {
@@ -109,20 +107,20 @@ DATABASES = {
 }
 ```
 
-4. Apply migrations:
+4. **Apply migrations**:
 
 ```bash
 python manage.py makemigrations
 python manage.py migrate
 ```
 
-5. Create superuser (optional):
+5. **Create superuser (optional)**:
 
 ```bash
 python manage.py createsuperuser
 ```
 
-6. Run backend server:
+6. **Run backend server**:
 
 ```bash
 python manage.py runserver
@@ -160,35 +158,34 @@ http://localhost:4200
 
 ## 🔗 API Endpoints
 
-| Method | Endpoint           | Description                |
-| ------ | ------------------ | -------------------------- |
-| POST   | /api/auth/token/   | Login, get JWT token       |
-| GET    | /api/auth/profile/ | Get logged-in user profile |
-| GET    | /api/items/        | Fetch all items for user   |
-| POST   | /api/items/        | Add new item               |
-| DELETE | /api/items/{id}/   | Delete item by ID          |
+| Method | Endpoint              | Description                |
+| ------ | -------------------- | -------------------------- |
+| POST   | /api/auth/token/      | Login, get JWT token       |
+| GET    | /api/auth/profile/    | Get logged-in user profile |
+| GET    | /api/items/           | Fetch all items for user   |
+| POST   | /api/items/           | Add new item               |
+| DELETE | /api/items/{id}/      | Delete item by ID          |
 
 ---
 
 ## 💡 Usage
 
-1. **Login** with your credentials
-2. **Dashboard**: Add items with name, quantity, unit, category
-3. **Item List**: Shows items with `created_at` timestamp
+1. **Login** with your credentials  
+2. **Dashboard**: Add items with name, quantity, unit, category  
+3. **Item List**: Displays items with `created_at` timestamp  
 4. **Logout** clears token and redirects to login
 
 ---
 
 ## ⚙️ Notes
 
-- Dashboard and other routes are protected using **Angular AuthGuard**
-- `created_at` is automatically set by the backend
-- Header dynamically shows **first\_name** or **username**
+- Dashboard and other routes are protected with **Angular AuthGuard**  
+- `created_at` is automatically set by the backend  
+- Header dynamically shows **first_name** or **username**  
 - JWT token must be included in headers for all protected API calls
 
 ---
 
 ## 📝 License
 
-This project is licensed under **MIT License**.
-
+This project is licensed under the **MIT License**.
