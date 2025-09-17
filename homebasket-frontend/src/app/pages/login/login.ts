@@ -44,17 +44,20 @@ export class Login implements OnInit {
 
   onSignup() {
     if (this.signupForm.valid) {
-      console.log('Signup Data:', this.signupForm.value);
+      // console.log('Signup Data:', this.signupForm.value);
       // API call for signup
       this.activeProfile = this.signupForm.value;
       this.auth.register(this.signupForm.value).subscribe({
         next: (res) => {
-          console.log('Signup Success:', res);
+          // console.log('Signup Success:', res);
           Swal.fire('Success', 'User registered successfully', 'success');
+
+          // 🔹 Reset the form after successful signup
+          this.signupForm.reset();
         },
         error: (err) => {
-          console.log('Signup Error:', err);
-          console.log(environment.apiUrl)
+          // console.log('Signup Error:', err);
+          // console.log(environment.apiUrl)
           Swal.fire('Error', 'Registration failed', 'error');
           this.serverErrors = err.error;
         }
@@ -65,7 +68,7 @@ export class Login implements OnInit {
 
   onLogin() {
     if (this.loginForm.valid) {
-      console.log('Login User:', this.loginForm.value.username);
+      // console.log('Login User:', this.loginForm.value.username);
       // API call for login
       this.auth.login(this.loginForm.value.username, this.loginForm.value.password)
         .subscribe({
@@ -76,7 +79,7 @@ export class Login implements OnInit {
             this.router.navigate(['/dashboard'], { replaceUrl: true });
           },
           error: (err: any) => {
-            console.error('Login Error:', err);
+            // console.error('Login Error:', err);
             let message = 'Login failed. Please check credentials.';
             if (err.error && err.error.detail) {
               message = err.error.detail; // DRF error message

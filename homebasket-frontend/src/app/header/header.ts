@@ -40,7 +40,7 @@ export class Header implements OnInit {
 
   logout() {
     localStorage.clear();
-    window.location.href = '/login';
+    this.router.navigate(['/login']);  // Angular router redirect
   }
 
 }
