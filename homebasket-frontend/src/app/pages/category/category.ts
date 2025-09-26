@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { ItemService } from '../../services/item.service';
+import * as alertify from 'alertifyjs';
 
 @Component({
   selector: 'app-category',
@@ -77,5 +78,75 @@ export class Category implements OnInit {
 
     this.itemService.togglePurchased(item)
   }
+
+markAllPurchased() {
+  this.itemService.purchaseAllItems().subscribe({
+    next: (res: any) => {
+      // alert(res.message);
+      alertify.success(res.message);
+
+      // Update UI
+      this.Grocery.forEach(item => item.purchased = true);
+      this.Fruits_Vegetables.forEach(item => item.purchased = true);
+      this.Dairy_Beverages_Bakery.forEach(item => item.purchased = true);
+      this.Household_Cleaning.forEach(item => item.purchased = true);
+      this.Miscellaneous.forEach(item => item.purchased = true);
+    },
+    error: (err) => {
+      console.error("Failed to mark all items purchased", err);
+      // alert('Something went wrong!');
+      alertify.error('Something went wrong!');
+    }
+  });
+}
+allItemsPurchased(): boolean {
+  return [...this.Grocery, ...this.Fruits_Vegetables, ...this.Dairy_Beverages_Bakery, ...this.Household_Cleaning, ...this.Miscellaneous]
+    .every(item => item.purchased);
+}
+
+
+resetAllPurchased() {
+  this.itemService.resetAllItems().subscribe({
+    next: (res: any) => {
+      alertify.success(res.message);
+
+      // Reset purchased status in local arrays
+      this.Grocery.forEach(item => item.purchased = false);
+      this.Fruits_Vegetables.forEach(item => item.purchased = false);
+      this.Dairy_Beverages_Bakery.forEach(item => item.purchased = false);
+      this.Household_Cleaning.forEach(item => item.purchased = false);
+      this.Miscellaneous.forEach(item => item.purchased = false);
+    },
+    error: (err) => {
+      console.error("Failed to reset all items", err);
+      alertify.error('Something went wrong!');
+    }
+  });
+}
+anyItemsPurchased(): boolean {
+  return [...this.Grocery, ...this.Fruits_Vegetables, ...this.Dairy_Beverages_Bakery, ...this.Household_Cleaning, ...this.Miscellaneous]
+    .some(item => item.purchased);
+}
+
+deleteAll() {
+  if (!confirm("Are you sure you want to delete all items?")) return;
+
+  this.itemService.deleteAllItems().subscribe({
+    next: (res: any) => {
+      alertify.success(res.message);
+
+      // Clear local arrays
+      this.Grocery = [];
+      this.Fruits_Vegetables = [];
+      this.Dairy_Beverages_Bakery = [];
+      this.Household_Cleaning = [];
+      this.Miscellaneous = [];
+    },
+    error: (err) => {
+      console.error("Failed to delete all items", err);
+      alertify.error('Something went wrong!');
+    }
+  });
+}
 
 }

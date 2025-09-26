@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AuthGuard } from '../guards/auth-guard';
 import { HttpHeaders } from '@angular/common/http';
+import * as alertify from 'alertifyjs';
 
 @Component({
   selector: 'app-header',

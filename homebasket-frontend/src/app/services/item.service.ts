@@ -70,5 +70,21 @@ export class ItemService {
       });
   }
 
+  purchaseAllItems(): Observable<any> {
+    return this.http.post(`${this.baseUrl}dashboard/items/purchase-all/`, {});
+  }
+
+  resetAllItems(): Observable<any> {
+    return this.http.post(`${this.baseUrl}dashboard/items/reset-all/`, {});
+  }
+  deleteAllItems(): Observable<any> {
+    return this.http.delete(`${this.baseUrl}dashboard/items/delete-all/`);
+  }
+
+  deleteAllItemsFromHistory(): Observable<any> {
+    return this.http.delete(`${this.baseUrl}analytics/delete-all-from-history/`);
+  }
+  
+
 
 }

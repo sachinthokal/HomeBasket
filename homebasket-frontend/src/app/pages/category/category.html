@@ -1,7 +1,27 @@
 <div class="container">
-      <h6><b>ITEMS LIST - <span>{{CURRENT | date: 'MMM yyyy' | uppercase}} </span></b></h6>
-      <!-- <div class="scrolling-text">Scrolling text</div> -->
+  <h6><b>ITEMS LIST - <span>{{CURRENT | date: 'MMM yyyy' | uppercase}} </span></b></h6>
+  <!-- <div class="scrolling-text">Scrolling text</div> -->
   <div class="row-space"></div>
+  <div class="button-row">
+    <button class="btn purchased-all" (click)="markAllPurchased()" [disabled]="allItemsPurchased()">
+      Purchased All ✅
+    </button>
+
+    <button class="btn reset-all" (click)="resetAllPurchased()" [disabled]="!anyItemsPurchased()">
+      Reset All 🔄
+    </button>
+
+    <button class="btn delete-all" (click)="deleteAll()"
+      [disabled]="!Grocery.length && !Fruits_Vegetables.length && !Dairy_Beverages_Bakery.length && !Household_Cleaning.length && !Miscellaneous.length">
+      Delete All 🗑️
+    </button>
+  </div>
+
+  <div class="row-space"></div>
+
+  <div class="row-space"></div>
+
+
   <div class="categories-container">
     <!-- Category 1 -->
     <div class="category">
@@ -28,7 +48,7 @@
       </div>
       <div class="item-card" *ngFor="let item of Fruits_Vegetables">
         <div class="item-row">
-         <span [class.purchased]="item.purchased">
+          <span [class.purchased]="item.purchased">
             {{ item.item_name }} {{ item.qty }} {{ item.unit }}
           </span>
           <div class="item-buttons">
@@ -45,8 +65,8 @@
         Dairy & Bakery 🍞🥛
       </div>
       <div class="item-card" *ngFor="let item of Dairy_Beverages_Bakery">
-         <div class="item-row">
-         <span [class.purchased]="item.purchased">
+        <div class="item-row">
+          <span [class.purchased]="item.purchased">
             {{ item.item_name }} {{ item.qty }} {{ item.unit }}
           </span>
           <div class="item-buttons">
@@ -63,8 +83,8 @@
         Household & Cleaning 🛒🏡
       </div>
       <div class="item-card" *ngFor="let item of Household_Cleaning">
-         <div class="item-row">
-         <span [class.purchased]="item.purchased">
+        <div class="item-row">
+          <span [class.purchased]="item.purchased">
             {{ item.item_name }} {{ item.qty }} {{ item.unit }}
           </span>
           <div class="item-buttons">
@@ -81,8 +101,8 @@
         Miscellaneous 🛒🏡
       </div>
       <div class="item-card" *ngFor="let item of Miscellaneous">
-         <div class="item-row">
-         <span [class.purchased]="item.purchased">
+        <div class="item-row">
+          <span [class.purchased]="item.purchased">
             {{ item.item_name }} {{ item.qty }} {{ item.unit }}
           </span>
           <div class="item-buttons">
