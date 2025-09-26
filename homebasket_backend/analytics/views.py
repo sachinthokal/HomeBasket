@@ -109,3 +109,19 @@ class BackupAndDeleteOldItemsAPI(APIView):
             )
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+class DeleteAllItemsFromHistoryAPI(APIView):
+    def delete(self, request):
+        user = request.user
+        if not user or not user.is_authenticated:
+            return Response({'error': 'Unauthorized'}, status=status.HTTP_401_UNAUTHORIZED)
+
+        items = GroceryListBackup.objects.filter(user=user)
+        deleted_count = items.count()
+        items.delete()
+
+        # ✅ Always return a message, even if 0 items
+        return Response(
+            {"message": f"{deleted_count} item(s) deleted successfully."},
+            status=status.HTTP_200_OK
+        )

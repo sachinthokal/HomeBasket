@@ -92,19 +92,11 @@ venv\Scripts\activate      # Windows
 pip install -r requirements.txt
 ```
 
-3. **Configure PostgreSQL** in `homebasket/settings.py`:
+3. **Configure PostgreSQL In ENV** in `HomeBasket\homebasket_backend\.env`:
 
-```python
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'homebasket_db',
-        'USER': 'your_db_user',
-        'PASSWORD': 'your_db_password',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
-    }
-}
+```bash
+DATABASE_URL=postgresql://postgres:your_password@localhost:5432/your_database
+
 ```
 
 4. **Apply migrations**:

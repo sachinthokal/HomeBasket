@@ -42,7 +42,7 @@
   margin:0;
   font-size:clamp(18px, 2.5vw, 24px);
   font-family: Georgia, serif;
-  color: whitesmoke
+  color: black
 }
 
 .cta{
@@ -87,4 +87,29 @@ img{
 
 @keyframes fadeInWord {
   to { opacity: 1; }
+}
+
+
+.footnote {
+  background-color: #1f1f1f;  /* dark background */
+  color: #ffffff;             /* white text */
+  padding: 12px 20px;
+  text-align: center;
+  font-size: 14px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  box-shadow: 0 -2px 6px rgba(0,0,0,0.3);
+}
+
+.footer-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+@media (min-width: 600px) {
+  .footer-content {
+    flex-direction: row;
+    justify-content: center;
+    gap: 20px;
+  }
 }

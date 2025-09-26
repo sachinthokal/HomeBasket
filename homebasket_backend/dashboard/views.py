@@ -82,3 +82,59 @@ class UpdatePurchaseStatusAPI(APIView):
             return Response({'error': 'Item not found'}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+class PurchaseAllItemsAPI(APIView):
+    """
+    Mark all grocery items of the logged-in user as purchased
+    """
+    def post(self, request):
+        user = request.user
+        if not user or not user.is_authenticated:
+            return Response({'error': 'Unauthorized'}, status=status.HTTP_401_UNAUTHORIZED)
+
+        # Get all items not yet purchased for this user
+        items = GroceryList.objects.filter(user=user, purchased=False)
+        updated_count = items.update(purchased=True, created_at=timezone.now().replace(microsecond=0))
+
+        return Response(
+            {"message": f"{updated_count} items marked as purchased."},
+            status=status.HTTP_200_OK
+        )
+    
+
+class ResetAllItemsAPI(APIView):
+    """
+    Reset all grocery items of the logged-in user (mark as not purchased)
+    """
+    def post(self, request):
+        user = request.user
+        if not user or not user.is_authenticated:
+            return Response({'error': 'Unauthorized'}, status=status.HTTP_401_UNAUTHORIZED)
+
+        # Get all items that are purchased
+        items = GroceryList.objects.filter(user=user, purchased=True)
+        updated_count = items.update(purchased=False, created_at=timezone.now().replace(microsecond=0))
+
+        return Response(
+            {"message": f"{updated_count} items reset to not purchased."},
+            status=status.HTTP_200_OK
+        )
+    
+
+class DeleteAllItemsAPI(APIView):
+    """
+    Delete all grocery items of the logged-in user
+    """
+    def delete(self, request):
+        user = request.user
+        if not user or not user.is_authenticated:
+            return Response({'error': 'Unauthorized'}, status=status.HTTP_401_UNAUTHORIZED)
+
+        items = GroceryList.objects.filter(user=user)
+        deleted_count = items.count()
+        items.delete()
+
+        return Response(
+            {"message": f"{deleted_count} items deleted successfully."},
+            status=status.HTTP_200_OK
+        )

@@ -5,6 +5,9 @@ import { AuthService } from '../../services/auth.Service';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
+import * as alertify from 'alertifyjs';
+
+
 
 @Component({
   selector: 'app-login',
@@ -50,15 +53,16 @@ export class Login implements OnInit {
       this.auth.register(this.signupForm.value).subscribe({
         next: (res) => {
           // console.log('Signup Success:', res);
-          Swal.fire('Success', 'User registered successfully', 'success');
-
+          // Swal.fire('Success', 'User registered successfully', 'success');
+          alertify.success(res);
           // 🔹 Reset the form after successful signup
           this.signupForm.reset();
         },
         error: (err) => {
           // console.log('Signup Error:', err);
           // console.log(environment.apiUrl)
-          Swal.fire('Error', 'Registration failed', 'error');
+          // Swal.fire('Error', 'Registration failed', 'error');
+           alertify.error(err);
           this.serverErrors = err.error;
         }
       });
@@ -73,9 +77,7 @@ export class Login implements OnInit {
       this.auth.login(this.loginForm.value.username, this.loginForm.value.password)
         .subscribe({
           next: (res: any) => {
-
-            //console.log('Login Success:', res);
-            Swal.fire('SUCCESS', 'LOGIN SUCCESSFUL !!', 'success');
+            alertify.success("LOGIN SUCCESSFUL !!");
             this.router.navigate(['/dashboard'], { replaceUrl: true });
           },
           error: (err: any) => {
@@ -84,7 +86,7 @@ export class Login implements OnInit {
             if (err.error && err.error.detail) {
               message = err.error.detail; // DRF error message
             }
-            Swal.fire('Error', message, 'error');
+             alertify.success(message);
           }
         });
     }

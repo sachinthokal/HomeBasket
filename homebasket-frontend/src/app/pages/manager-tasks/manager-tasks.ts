@@ -5,6 +5,8 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { ItemService } from '../../services/item.service';
 import Swal from 'sweetalert2';
+import * as alertify from 'alertifyjs';
+
 
 @Component({
   selector: 'app-manager-tasks',
@@ -121,10 +123,10 @@ export class ManagerTasks implements OnInit {
           body: tableRows,
           startY: 30
         });
-
         doc.save('history_grocery_items.pdf');
       },
-      error: (err) => console.error('Failed to get items', err)
+      error: (err) => alertify.error(err) 
+      // console.error('Failed to get items', err)
     });
   }
 
